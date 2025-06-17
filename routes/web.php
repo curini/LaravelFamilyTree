@@ -10,6 +10,9 @@ Route::view('/', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('home');
 
+
+
+
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
