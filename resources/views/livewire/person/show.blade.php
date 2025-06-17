@@ -91,6 +91,7 @@
                 </p>
             </div>
         </div>
+        @if(!empty($slides))
         <!--  Carousel of my images -->
         <div class="relative w-full h-64 overflow-hidden" 
             x-data="{ currentSlide: 0, slides: {{ json_encode($slides) }} }">
@@ -125,6 +126,6 @@
                 &#10095;
             </button>
         </div>
-
+        @endif
     </div>
 </x-layouts.app>
