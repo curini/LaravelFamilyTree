@@ -5,7 +5,12 @@
             @csrf
             <div class="flex gap-4">
                 <input class="input w-full border border-zinc-200" type="text" name="search">
-                <button class="bg-blue-500 hover:bg-zinc-700 text-white font-bold py-2 px-4" type="submit">Search</button>
+                <a target="_blank" href="{{ route('persons.json') }}" class="bg-blue-500 hover:bg-zinc-700 text-white font-bold py-2 px-4">
+                    Download
+                </a>
+                <button class="bg-blue-500 hover:bg-zinc-700 text-white font-bold py-2 px-4" type="submit">
+                    Search
+                </button>
             </div>
         </form>
 
