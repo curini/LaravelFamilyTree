@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use DateTime;
 use Illuminate\Database\Eloquent\Model;
+use App\EventTypesEnum;
+use DateTime;
 
 class Person extends Model
 {
@@ -12,98 +13,99 @@ class Person extends Model
     protected $fillable = [
         'name',
         'job',
-        'gender',
-        'birth',
-        'birthplace',
-        'birthcountry',
-        'death',
-        'deathplace',
-        'deathcountry',
-        'spouse',
-        'group',
-        'generation',
-        'mother',
-        'father',
-        'photo',
+        'description',
+        'gender_id',
+        'spouse_id',
+        'group_id',
+        'mother_id',
+        'father_id',
+        'image_id',
+        'position_id',
         'age',
-        'birth_act',
-        'death_act',
-        'other_img'
-    ];
-
-    // force display date like dd mm yyyy
-    protected $casts = [
-        'birth' => 'date',
-        'death' => 'date'
-    ];
-
-    public static $isoMap = [
-        'FRA' => 'France',
-        'PRT' => 'Portugal',
-        'TUN' => 'Tunisie',
-        'SWE' => 'Suède',
-        'GER' => 'Allemagne',
-        'ESP' => 'Espagne',
-        'GBR' => 'Angleterre',
-        'ITA' => 'Italie',
-        'USA' => 'Etats-Unis'
     ];
 
     public static function boot()
     {
         parent::boot();
-        self::creating(function ($model) {
-            $model->birthcountry = $model->birthcountry ?? 'FRA';
-            $model->age = $model->age ?? $model->calculateAge($model->birth, $model->death);
-            $model->photo = $model->photo ?? '/img/portraits/default.PNG';
-        });
-        self::updating(function ($model) {
-            $model->birthcountry = $model->birthcountry ?? 'FRA';
-            $model->age = $model->age  ?? $model->calculateAge($model->birth, $model->death);
-            $model->photo = $model->photo ?? '/img/portraits/default.PNG';
+
+        self::saving(function ($model) {
+            $model->age = $model->calculateAge($model->birth(), $model->death());
         });
     }
 
     public function group()
     {
-        return $this->belongsTo(Group::class, 'group');
+        return $this->belongsTo(Group::class);
     }
 
     public function spousePerson()
     {
-        return $this->belongsTo(Person::class, 'spouse');
+        return $this->belongsTo(Person::class, 'spouse_id');
     }
 
     public function motherPerson()
     {
-        return $this->belongsTo(Person::class, 'mother');
+        return $this->belongsTo(Person::class, 'mother_id');
     }
 
     public function fatherPerson()
     {
-        return $this->belongsTo(Person::class, 'father');
+        return $this->belongsTo(Person::class, 'father_id');
     }
 
     public function childrenAsFather()
     {
-        return $this->hasMany(Person::class, 'father');
+        return $this->hasMany(Person::class, 'father_id');
     }
 
     public function childrenAsMother()
     {
-        return $this->hasMany(Person::class, 'mother');
+        return $this->hasMany(Person::class, 'mother_id');
     }
 
-    public function getBirthcountryNameAttribute(): ?string
+    public function portrait()
     {
-        if (!$this->birthcountry) return null;
-        return $this->isoMap[$this->birthcountry] ?? $this->birthcountry;
+        return $this->belongsTo(Image::class, 'image_id');
     }
 
-    public function getDeathcountryNameAttribute(): ?string
+    public function events()
     {
-        if (!$this->deathcountry) return null;
-        return $this->isoMap[$this->deathcountry] ?? $this->deathcountry;
+        return $this->hasMany(Event::class, 'person_id');
+    }
+
+    public function gender()
+    {
+        return $this->belongsTo(Gender::class);
+    }
+
+    public function birth(): ?DateTime
+    {
+        return data_get($this->getEvent(EventTypesEnum::BIRTH, false), 'date');
+    }
+
+    public function death(): ?DateTime
+    {
+        return data_get($this->getEvent(EventTypesEnum::DEATH, false), 'date');
+    }
+
+    public function getEvent(EventTypesEnum $type = EventTypesEnum::BIRTH, bool $withImage = true): ?Event
+    {
+        $event = $this->events();
+
+        if ($withImage) {
+            $event = $event->select('image_id')->with('image:id,path,name');
+        }
+
+        return $event
+            ->whereHas('eventType', function ($query) use ($type) {
+                $query->where('name', $type);
+            })
+            ->first();
+    }
+
+    public function getName()
+    {
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     private function calculateAge(?DateTime $birth, ?DateTime $death): int

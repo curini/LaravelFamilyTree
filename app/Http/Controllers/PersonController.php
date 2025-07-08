@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Person,  Group};
+use App\Models\{Country, Person, Group};
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-
 
 class PersonController extends Controller
 {
@@ -30,11 +29,13 @@ class PersonController extends Controller
         // get the sort direction from the request
         $direction = $request->input('direction', 'asc');
 
-        // get the data from the database    
-        $data = Person::where('name', 'like', '%' . $search . '%')        
-            ->orderBy($sort, $direction)            
-            ->paginate($perPage, ['*'], 'page', $page);            
-        
+        // get the data from the database
+        $data = Person::where('first_name', 'like', '%' . $search . '%')
+            ->orWhere('last_name', 'like', '%' . $search . '%')
+            ->orderBy($sort, $direction)
+            ->paginate($perPage, ['*'], 'page', $page)
+            ->withQueryString();
+
         return view('livewire.person.index', compact('data'));
     }
 
@@ -47,7 +48,7 @@ class PersonController extends Controller
         $fathers = Person::where('gender', 'M')->pluck('name', 'id');
         $spouses = Person::all()->pluck('name', 'id');
         $groups = Group::all()->pluck('id', 'id');
-        $countries = Person::$isoMap;
+        $countries = Country::all();
         return view('livewire.person.create', compact('mothers', 'fathers', 'spouses', 'groups', 'countries'));
     }
 
@@ -67,13 +68,13 @@ class PersonController extends Controller
     public function show(string $id): View
     {
         $person = Person::with([
-            'motherPerson', 
-            'fatherPerson', 
-            'spousePerson', 
-            'childrenAsMother', 
-            'childrenAsFather'
-            ])->findOrFail($id);
-        $countries = Person::$isoMap;
+            'motherPerson',
+            'fatherPerson',
+            'spousePerson',
+            'childrenAsMother',
+            'childrenAsFather',
+        ])->findOrFail($id);
+        $countries = Country::all();
         $slides = [];
         if ($person->birth_act) {
             $slides[] = $person->birth_act;
@@ -98,7 +99,7 @@ class PersonController extends Controller
         $fathers = Person::where('gender', 'M')->pluck('name', 'id');
         $spouses = Person::all()->pluck('name', 'id');
         $groups = Group::all()->pluck('id', 'id');
-        $countries = Person::$isoMap;
+        $countries = Country::all();
         return view('livewire.person.edit', compact('person', 'mothers', 'fathers', 'spouses', 'groups', 'countries'));
     }
 
@@ -109,7 +110,7 @@ class PersonController extends Controller
     {
         Person::findOrFail($id)->update($request->all());
 
-        return redirect()->route('persons.index');   
+        return redirect()->route('persons.index');
     }
 
     /**
@@ -122,11 +123,11 @@ class PersonController extends Controller
         return redirect()->route('persons.index');
     }
 
-	public function json()
-	{
-		$person = Person::all()->toArray();
+    public function json()
+    {
+        $person = Person::all()->toArray();
         $group = Group::all()->toArray();
 
-		return response()->json(array_merge($person, $group));
-	}
+        return response()->json(array_merge($person, $group));
+    }
 }

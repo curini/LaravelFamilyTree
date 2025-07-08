@@ -1,63 +1,80 @@
 <x-layouts.app :title="__('Persons')">
-    <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
-        <h1>{{ __('Persons list') }}</h1>
-        <form class="mb-4" method="GET" action="{{ route('persons.index') }}">
+    <div class="p-6 bg-white shadow rounded-xl">
+        <h1 class="text-2xl font-semibold mb-6 text-gray-800">{{ __('Persons list') }}</h1>
+
+        <form class="mb-6" method="GET" action="{{ route('persons.index') }}">
             @csrf
-            <div class="flex gap-4">
-                <input class="input w-full border border-zinc-200" type="text" name="search">
-                <a target="_blank" href="{{ route('persons.json') }}" class="bg-blue-500 hover:bg-zinc-700 text-white font-bold py-2 px-4">
-                    Download
-                </a>
-                <button class="bg-blue-500 hover:bg-zinc-700 text-white font-bold py-2 px-4" type="submit">
-                    Search
+            <div class="flex flex-wrap gap-3 items-center">
+                <input
+                    class="flex-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    type="text"
+                    name="search"
+                    placeholder="🔍 {{ __('Search by name') }}"
+                >
+                <button
+                    class="cursor-pointer flex items-center gap-2 bg-white border border-gray-300 text-gray-800 hover:text-zinc-800 dark:hover:text-white dark:hover:bg-white/[7%] hover:bg-zinc-800/5 font-semibold px-4 py-2 rounded-md transition shadow-sm"
+                    type="submit"
+                >
+                    <span>Search</span>
                 </button>
+                <a
+                    target="_blank"
+                    href="{{ route('persons.json') }}"
+                    class="flex items-center gap-2 bg-white border border-gray-300 text-gray-800 hover:text-zinc-800 dark:hover:text-white dark:hover:bg-white/[7%] hover:bg-zinc-800/5 font-semibold px-4 py-2 rounded-md transition shadow-sm"
+                >
+                    ⬇️ <span>Download</span>
+                </a>
             </div>
         </form>
 
-        <table class="table w-full mt-4">
-            <thead>    
-                <tr class="text-left text-sm">                    
-                    <th>
-                        <a href="{{ route('persons.index', ['sort' => 'name', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc']) }}">
-                            Name
-                        </a>
-                    </th>
-                    <th>
-                        <a href="{{ route('persons.index', ['sort' => 'age', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc']) }}">
-                            Age
-                        </a>
-                    </th>
-                    <th>
-                        <a href="{{ route('persons.index', ['sort' => 'birth', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc']) }}">
-                            Birth
-                        </a>
-                    </th>
-                    <th>
-                        <a href="{{ route('persons.index', ['sort' => 'death', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc']) }}">
-                        Death
-                        </a>
-                    </th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($data as $person)
-                    <tr class="text-sm">
-                        <td>{{ $person->name }}</td>
-                        <td>{{ $person->age }}</td>
-                        <td>{{ $person->birth ? $person->birth->format('d F Y') : '' }}</td>
-                        <td>{{ $person->death  ? $person->death->format('d F Y') : '' }}</td>
-                        <td class="text-center py-2">
-                            <flux:link class="hover:!bg-blue-500 me-2 rounded" :href="route('persons.show', $person->id)" wire:navigate>{{ __('Show') }}</flux:link>
-                            <flux:link class="hover:!bg-blue-500 me-2 rounded" :href="route('persons.edit', $person->id)" wire:navigate>{{ __('Edit') }}</flux:link>                            
-                            <!-- 
-                            <flux:link class="bg-red-500 hover:bg-red-600 ms-2 rounded py-1 px-2" :href="route('persons.destroy', $person->id)" wire:navigate>{{ __('Delete') }}</flux:link>
-                            -->
-                        </td>   
+        <div class="overflow-x-auto w-full">
+            <table class="table-auto w-full text-sm border border-gray-200">
+                <thead class="bg-gray-100 text-gray-700 uppercase tracking-wide">
+                    <tr>
+                        <th class="p-3 text-left">
+                            <a href="{{ route('persons.index', ['sort' => 'last_name', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc']) }}">
+                                {{ __('Last name') }}
+                            </a>
+                        </th>
+                        <th class="p-3 text-left">
+                            <a href="{{ route('persons.index', ['sort' => 'first_name', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc']) }}">
+                                {{ __('First name') }}
+                            </a>
+                        </th>
+                        <th class="p-3 text-left">
+                            <a href="{{ route('persons.index', ['sort' => 'age', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc']) }}">
+                                {{ __('Age') }}
+                            </a>
+                        </th>
+                        <th class="p-3 text-center">{{ __('Actions') }}</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @forelse ($data as $person)
+                        <tr class="hover:bg-gray-50 border-t">
+                            <td class="p-3">{{ $person->last_name }}</td>
+                            <td class="p-3">{{ $person->first_name }}</td>
+                            <td class="p-3">{{ $person->age }}</td>
+                            <td class="p-3 text-center">
+                                <flux:link class="text-blue-600 hover:underline mr-3" :href="route('persons.show', $person->id)" wire:navigate>
+                                    {{ __('Show') }}
+                                </flux:link>
+                                <flux:link class="text-green-600 hover:underline mr-3" :href="route('persons.edit', $person->id)" wire:navigate>
+                                    {{ __('Edit') }}
+                                </flux:link>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="p-4 text-center text-gray-500">{{ __('No persons found.') }}</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-6">
+            {{ $data->links() }}
+        </div>
     </div>
-    {{ $data->links() }}
 </x-layouts.app>
