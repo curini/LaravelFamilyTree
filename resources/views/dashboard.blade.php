@@ -5,7 +5,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
             <div class="bg-white border border-gray-200 rounded-xl p-4 shadow">
                 <div class="aspect-video bg-gray-100 flex items-center justify-center rounded-lg">
-                    <div id="map" class="w-full rounded-lg shadow" role="region"></div>
+                    <div id="map" class="w-full rounded-lg shadow" x-data x-init="window.initMap()" wire:ignore></div>
                 </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -23,30 +23,39 @@
         </div>
     </div>
     <script>
-        const map = L.map('map');
-        const openStreetMap = new L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+    window.initMap = function() {
+        const mapElement = document.getElementById('map');
+
+        if (!mapElement) {
+            return;
+        }
+
+        if (window.leafletMap) {
+            window.leafletMap.remove();
+        }
+
+        window.leafletMap = L.map(mapElement).setView([20, 0], 2);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors',
-        });
-        map.setView([20, 0], 2);
-        map.addLayer(openStreetMap);
+        }).addTo(window.leafletMap);
 
         const markers = @json($markers ?? []);
 
         if (Array.isArray(markers)) {
-
             markers.forEach(({ latitude, longitude, total }) => {
                 const radius = 5 + total * 2;
                 L.circleMarker([latitude, longitude], {
-                    radius: radius,
+                    radius,
                     color: '#2563eb',
                     fillColor: '#3b82f6',
                     fillOpacity: 0.6,
                 })
                 .bindPopup(`${total} ville${total > 1 ? 's' : ''}`)
-                .addTo(map);
+                .addTo(window.leafletMap);
             });
         }
-
-
+    }
     </script>
 </x-layouts.app>

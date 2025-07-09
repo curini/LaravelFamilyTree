@@ -73,20 +73,10 @@ class PersonController extends Controller
             'spousePerson',
             'childrenAsMother',
             'childrenAsFather',
+            'events',
         ])->findOrFail($id);
-        $countries = Country::all();
-        $slides = [];
-        if ($person->birth_act) {
-            $slides[] = $person->birth_act;
-        }
-        if ($person->other_img) {
-            $slides[] = $person->other_img;
-        }
-        if ($person->death_act) {
-            $slides[] = $person->death_act;
-        }
 
-        return view('livewire.person.show', compact('person', 'countries', 'slides'));
+        return view('livewire.person.show', compact('person'));
     }
 
     /**

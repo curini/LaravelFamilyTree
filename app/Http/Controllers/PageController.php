@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\City;
+use App\EventTypesEnum;
 use App\Services\PersonService;
 use Illuminate\Support\Facades\DB;
 
@@ -11,16 +11,25 @@ class PageController extends Controller
     public function dashboard()
     {
         $person = new PersonService();
+        $event = DB::table('events')
+            ->join('cities', 'events.city_id', '=', 'cities.id')
+            ->join('event_types', 'events.event_type_id', '=', 'event_types.id')
+            ->whereIn('event_types.name', [EventTypesEnum::DEATH, EventTypesEnum::BIRTH])
+            ->groupBy('cities.latitude', 'cities.longitude')
+            ->select('cities.latitude', 'cities.longitude', DB::raw('COUNT(*) as total'))
+            ->get();
+
         return view('dashboard', [
             'person' => $person->getPersonsStats(),
-            'markers' => City::select('latitude', 'longitude', DB::raw('COUNT(*) as total'))
-                ->groupBy('latitude', 'longitude')
-                ->get(),
+            'markers' => $event,
         ]);
     }
 
     public function familyTree()
     {
-        return view('familyTree');
+        $person = new PersonService();
+        return view('familyTree', [
+            'persons' => $person->getPersons(),
+        ]);
     }
 }

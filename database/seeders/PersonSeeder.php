@@ -24,22 +24,25 @@ class PersonSeeder extends Seeder
             return isset($value, $value['key'], $value['name']);
         });
 
-        $y = 30000;
-
         $img_man = $this->updateOrCreateImage(config('persons.portrait.M.src', ''), 'portrait');
         $img_woman = $this->updateOrCreateImage(config('persons.portrait.F.src', ''), 'portrait');
+        $positions = [];
+        $start = 0;
 
-        foreach ($data as $value) {
-            if ($y != $value['generation']) {
-                $y = $value['generation'];
-                $x = 100;
+        foreach ($data as $key => $value) {
+            if ($key == 0) {
+                $start = $value['generation'];
+            }
+            if (empty($positions[$value['generation']])) {
+                $positions[$value['generation']] = 100;
             }
 
             $gender = Gender::where(['value' => $value['gender'] ?? 'M'])->firstOrFail();
             $image = isset($value['photo']) ? $this->updateOrCreateImage($value['photo'], 'portrait') : null;
             $name = $this->setNames($value['name']);
-            $position = $this->setPosition($x, (float) $value['generation']);
-            $x += 100;
+            $y = ($value['generation'] - $start) * 70 + 40;
+            $position = $this->setPosition($positions[$value['generation']], $y);
+            $positions[$value['generation']] += 240;
 
             $default_image = isset($value['gender']) && $value['gender'] == 'F' ? $img_woman : $img_man;
 
@@ -91,7 +94,8 @@ class PersonSeeder extends Seeder
         $lastname = '';
 
         foreach ($names as $value) {
-            if (ctype_upper(trim($value))) {
+            $clean_name = str_replace('-', '', $value);
+            if (ctype_upper(trim($clean_name))) {
                 $lastname .= $value . ' ';
                 $name = str_replace($value, '', $name);
             }

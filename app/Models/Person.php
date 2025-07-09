@@ -38,6 +38,11 @@ class Person extends Model
         return $this->belongsTo(Group::class);
     }
 
+    public function position()
+    {
+        return $this->belongsTo(Position::class);
+    }
+
     public function spousePerson()
     {
         return $this->belongsTo(Person::class, 'spouse_id');
@@ -110,7 +115,7 @@ class Person extends Model
 
     private function calculateAge(?DateTime $birth, ?DateTime $death): int
     {
-        if (!$birth) {
+        if (!isset($birth)) {
             return 0;
         }
         $end = $death ?? new DateTime();
