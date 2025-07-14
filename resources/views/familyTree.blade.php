@@ -1,26 +1,50 @@
 <x-layouts.app :title="__('Family Tree')">
-    <div class="relative w-[1000px] h-[800px] border border-gray-300 overflow-auto">
-        @foreach ($persons as $person)
-            <a href="{{ route('persons.show', $person->id) }}">
-            <div
-                class="absolute w-[220px] h-16 p-2 bg-white rounded shadow text-center border border-blue-500 text-xs"
-                style="left: {{ $person->position->x }}px; top: {{ $person->position->y }}px;"
-            >
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div>
-                        <img src="{{ $person->portrait->path }}" alt="" style="width: 50px;height: 50px">
-                    </div>
-                    <div>
-                        <strong class="my-text-ellipsis">
-                            {{ $person->first_name }}
-                        </strong>
-                        <span class="text-gray-500 my-text-ellipsis">
-                            {{ $person->last_name }}
-                        </span>
-                    </div>
-                </div>
-            </div>
-            </a>
-        @endforeach
+    <div class="relative overflow-auto scrollable-x" style="width: 1200px; height: 800px;">
+        <svg width="8500" height="800" xmlns="http://www.w3.org/2000/svg">
+            @foreach ($persons as $person)
+                @if ($person->motherPerson)
+                    <line
+                        x1="{{ $person->position->x + 110 }}" y1="{{ $person->position->y + 32 }}"
+                        x2="{{ $person->motherPerson->position->x + 110 }}" y2="{{ $person->motherPerson->position->y + 32 }}"
+                        stroke="green" stroke-width="2" />
+                @endif
+                @if ($person->fatherPerson)
+                    <line
+                        x1="{{ $person->position->x + 110 }}" y1="{{ $person->position->y + 32 }}"
+                        x2="{{ $person->fatherPerson->position->x + 110 }}" y2="{{ $person->fatherPerson->position->y + 32 }}"
+                        stroke="green" stroke-width="2" />
+                @endif
+                @if ($person->spousePerson)
+                    <line
+                        x1="{{ $person->position->x + 110 }}" y1="{{ $person->position->y + 32 }}"
+                        x2="{{ $person->spousePerson->position->x + 110 }}" y2="{{ $person->spousePerson->position->y + 32 }}"
+                        stroke="red" stroke-dasharray="15" stroke-width="2" />
+                @endif
+            @endforeach
+            @foreach ($persons as $person)
+                <g>
+                    <rect x="{{ $person->position->x }}" y="{{ $person->position->y }}" width="220" height="66" fill="white" stroke="blue" rx="8" />
+                    <image x="{{ $person->position->x + 10 }}" y="{{ $person->position->y + 8 }}" width="50" height="50" href="{{ $person->portrait->path }}" />
+                    <text x="{{ $person->position->x + 70 }}" y="{{ $person->position->y + 25 }}" font-size="12" font-weight="bold">
+                        {{ $person->first_name }}
+                    </text>
+                    <text x="{{ $person->position->x + 70 }}" y="{{ $person->position->y + 45 }}" font-size="12" fill="gray">
+                        {{ $person->last_name }}
+                    </text>
+                </g>
+            @endforeach
+        </svg>
     </div>
 </x-layouts.app>
+
+
+<script>
+document.querySelectorAll('.scrollable-x').forEach(el => {
+    el.addEventListener('wheel', function(e) {
+        if (e.deltaY !== 0) {
+            e.preventDefault();
+            el.scrollLeft += e.deltaY;
+        }
+    });
+});
+</script>
