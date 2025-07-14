@@ -37,7 +37,7 @@ class PersonService
 
     public function getPersons()
     {
-        return Person::with('position')->has('position')->get();
+        return Person::with('position', 'motherPerson', 'fatherPerson', 'spousePerson')->has('position')->get();
     }
 
     private function countPersons()
