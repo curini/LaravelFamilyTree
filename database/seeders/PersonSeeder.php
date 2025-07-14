@@ -40,8 +40,8 @@ class PersonSeeder extends Seeder
             $gender = Gender::where(['value' => $value['gender'] ?? 'M'])->firstOrFail();
             $image = isset($value['photo']) ? $this->updateOrCreateImage($value['photo'], 'portrait') : null;
             $name = $this->setNames($value['name']);
-            $y = ($value['generation'] - $start) * 70 + 40;
-            $position = $this->setPosition($positions[$value['generation']], $y);
+            $y = ($value['generation'] - $start) * 75 + 40;
+            $position = $this->setPosition($value['x'] ?? $positions[$value['generation']], $y);
             $positions[$value['generation']] += 240;
 
             $default_image = isset($value['gender']) && $value['gender'] == 'F' ? $img_woman : $img_man;
