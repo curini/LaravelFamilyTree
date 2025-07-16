@@ -117,7 +117,25 @@
                                 <h2 class="font-semibold text-lg text-gray-800 truncate">
                                     {{ $event->title ?? $event->eventType->name ?? 'Nom de l’évènement' }}
                                 </h2>
-                                <p class="text-gray-600">📍 {{ $event->city->name ?? 'Ville inconnue' }}</p>
+                                @php
+                                    $city = $event->city;
+                                    $department = $city->department ?? null;
+                                    $region = $department->region ?? null;
+                                    $country = $region->country ?? null;
+                                @endphp
+
+                                <p class="text-gray-600">
+                                    📍 {{ $city->name ?? 'Ville inconnue' }}
+                                    @if($department)
+                                        - {{ $department->name }}
+                                    @endif
+                                    @if($region)
+                                        - {{ $region->name }}
+                                    @endif
+                                    @if($country)
+                                        ({{ $country->name }})
+                                    @endif
+                                </p>
                             </div>
                         </div>
                     </div>
