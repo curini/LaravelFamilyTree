@@ -2,16 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\EventTypesEnum;
-use App\Models\City;
-use App\Models\EventType;
 use App\Models\Gender;
 use App\Models\Image;
 use Illuminate\Database\Seeder;
 use App\Models\Person;
-use App\Models\Event;
 use App\Models\Position;
-use DateTime;
 
 class PersonSeeder extends Seeder
 {
@@ -39,6 +34,9 @@ class PersonSeeder extends Seeder
 
             $gender = Gender::where(['value' => $value['gender'] ?? 'M'])->firstOrFail();
             $image = isset($value['photo']) ? $this->updateOrCreateImage($value['photo'], 'portrait') : null;
+
+            $this->setImages($value);
+
             $name = $this->setNames($value['name']);
             $y = ($value['generation'] - $start) * 75 + 40;
             $position = $this->setPosition($value['x'] ?? $positions[$value['generation']], $y);
@@ -67,23 +65,26 @@ class PersonSeeder extends Seeder
                     'position_id' => $position->id,
                 ]
             );
+        }
+    }
 
-            if (isset($value['birth'])) {
-                $this->setAllEvent(
-                    $person->id,
-                    $value['birth'],
-                    $value['birthplace'] ?? '',
-                    EventTypesEnum::BIRTH->value
-                );
-            }
-
-            if (isset($value['death'])) {
-                $this->setAllEvent(
-                    $person->id,
-                    $value['death'],
-                    $value['deathplace'] ?? '',
-                    EventTypesEnum::DEATH->value
-                );
+    private function setImages(array $value): void
+    {
+        $types = [
+            'birth_img' => 'birth',
+            'death_img' => 'death',
+            'house_img' => 'house',
+            'oldhouse_img' => 'house',
+            'wedding_img' => 'wedding',
+            'otherwedding_img' => 'wedding',
+            'papers_img' => 'papers',
+            'otherpapers_img' => 'papers',
+            'deathchild_img' => 'death',
+            'military_img' => 'military',
+        ];
+        foreach ($types as $key => $type) {
+            if (isset($value[$key])) {
+                $this->updateOrCreateImage($value[$key], $type);
             }
         }
     }
@@ -113,28 +114,6 @@ class PersonSeeder extends Seeder
             [
                 'X' => $x,
                 'y' => $y,
-            ]
-        );
-    }
-
-    private function setAllEvent(int $person_id, string $date, string $city, string $type): void
-    {
-        $eventType = EventType::where(['name' => $type])->first();
-        $city = City::where(['name' => $city])->first();
-
-        Event::updateOrCreate(
-            [
-                'person_id' => $person_id,
-                'image_id' => null,
-                'event_type_id' => $eventType->id,
-                'date' => new \DateTime($date),
-            ],
-            [
-                'person_id' => $person_id,
-                'image_id' => null,
-                'event_type_id' => $eventType->id,
-                'date' => new \DateTime($date),
-                'city_id' => $city->id ?? null,
             ]
         );
     }
