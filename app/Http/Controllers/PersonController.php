@@ -73,7 +73,9 @@ class PersonController extends Controller
             'spousePerson',
             'childrenAsMother',
             'childrenAsFather',
-            'events',
+            'events' => function ($query) {
+                $query->orderBy('date', 'asc');
+            },
         ])->findOrFail($id);
 
         return view('livewire.person.show', compact('person'));
