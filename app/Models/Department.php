@@ -6,5 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Department extends Model
 {
-    //
+    protected $fillable = ['name', 'region_id'];
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class);
+    }
 }

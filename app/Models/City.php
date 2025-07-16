@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class City extends Model
 {
-    protected $fillable = ['name', 'region', 'latitude', 'longitude', 'department', 'country_id'];
+    protected $fillable = ['name', 'latitude', 'longitude', 'department_id'];
 
-    public function Country()
+    public function department()
     {
-        $this->belongsTo(Country::class);
+        return $this->belongsTo(Department::class);
     }
 }
