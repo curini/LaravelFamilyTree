@@ -80,3 +80,13 @@ select:focus[data-flux-control] {
     display: block;
     white-space: nowrap;
 }
+
+.person-bg {
+    fill: white;
+    stroke: blue;
+    transition: fill 0.2s ease-in-out;
+}
+
+.person-link:hover .person-bg {
+    fill: #e0f0ff;
+}

@@ -22,16 +22,18 @@
                 @endif
             @endforeach
             @foreach ($persons as $person)
-                <g>
-                    <rect x="{{ $person->position->x }}" y="{{ $person->position->y }}" width="220" height="66" fill="white" stroke="blue" rx="8" />
-                    <image x="{{ $person->position->x + 10 }}" y="{{ $person->position->y + 8 }}" width="50" height="50" href="{{ $person->portrait->path }}" />
-                    <text x="{{ $person->position->x + 70 }}" y="{{ $person->position->y + 25 }}" font-size="12" font-weight="bold">
-                        {{ $person->first_name }}
-                    </text>
-                    <text x="{{ $person->position->x + 70 }}" y="{{ $person->position->y + 45 }}" font-size="12" fill="gray">
-                        {{ $person->last_name }}
-                    </text>
-                </g>
+                <a class="person-link" xlink:href="{{ route('persons.show', $person->id) }}" target="_blank">
+                    <g>
+                        <rect class="person-bg" x="{{ $person->position->x }}" y="{{ $person->position->y }}" width="220" height="66" rx="8" />
+                        <image x="{{ $person->position->x + 10 }}" y="{{ $person->position->y + 8 }}" width="50" height="50" href="{{ $person->portrait->path }}" />
+                        <text x="{{ $person->position->x + 70 }}" y="{{ $person->position->y + 25 }}" font-size="12" font-weight="bold">
+                            {{ $person->first_name }}
+                        </text>
+                        <text x="{{ $person->position->x + 70 }}" y="{{ $person->position->y + 45 }}" font-size="12" fill="gray">
+                            {{ $person->last_name }}
+                        </text>
+                    </g>
+                </a>
             @endforeach
         </svg>
     </div>
