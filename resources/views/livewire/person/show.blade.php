@@ -30,6 +30,13 @@
                         </p>
                     @endisset
 
+                    @isset($person->description)
+                        <p>
+                            {{ __('Commentaries:') }}
+                            <span style="white-space: pre-wrap">{{ $person->description }}</span>
+                        </p>
+                    @endisset
+
                     @isset($person->motherPerson)
                         <p>
                             {{ __('Mother:') }}
@@ -49,7 +56,7 @@
                         </p>
                     @endisset
 
-                    @isset($person->spousePerson->name)
+                    @isset($person->spousePerson)
                         <p>
                             {{ __('Spouse:') }}
                             <flux:link href="{{ route('persons.show', $person->spousePerson->id) }}"
