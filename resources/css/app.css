@@ -90,3 +90,27 @@ select:focus[data-flux-control] {
 .person-link:hover .person-bg {
     fill: #e0f0ff;
 }
+
+.date-marker {
+    border-style: var(--tw-border-style);
+    border-width: 2px;
+    border-color: var(--color-zinc-300);
+    width: calc(var(--spacing)*6);
+    height: calc(var(--spacing)*6);
+    left: calc(var(--spacing)*-3);
+    top: calc(var(--spacing)*2);
+    position: absolute;
+    border-radius: 3.40282e38px;
+    background-color: var(--color-white);
+}
+
+.date-marker::before {
+    content: '';
+    background-color: var(--color-zinc-300);
+    width: 14px;
+    height: 2px;
+    display: block;
+    position: absolute;
+    left: -14px;
+    top: 10px;
+}

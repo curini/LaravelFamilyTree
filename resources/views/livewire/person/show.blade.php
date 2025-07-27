@@ -1,152 +1,129 @@
 <x-layouts.app :title="__('See person')">
-    <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
-        <h1 class="text-2xl font-bold">
-            {{ $person->getName() }}
-            <a href="{{ route('persons.edit', $person->id) }}" class="text-sm cursor-pointer rounded" wire:navigate>{{ __('Edit') }}</a>
-        </h1>
-        <div class="flex h-full w-full space-x-4">
-            @isset($person->portrait)
-                <div class="p-4 flex-1">
-                    <img src="{{ $person->portrait->path }}" alt="" class="[:where(&)]:w-64" />
+    <div class="container mx-auto p-6">
+
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold">{{ $person->getName() }}</h1>
+            <a href="{{ route('persons.edit', $person->id) }}" class="text-blue-600 hover:underline text-sm" wire:navigate>{{ __('Edit') }}</a>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="space-y-6">
+                @isset($person->portrait)
+                    <div class="[:where(&)]:w-64 bg-gray-100 overflow-hidden">
+                        <img src="{{ $person->portrait->path }}" alt="Portrait" class="w-full h-full object-cover"/>
+                    </div>
+                @endisset
+
+                <div class="p-6 space-y-4">
+                    <h3 class="text-xl font-semibold">{{ __('Personal Information') }}</h3>
+
                     @isset($person->gender)
-                        <p>
-                            {{ __('Gender:') }}
-                            {{ $person->gender->name }}
-                        </p>
+                        <p><strong>{{ __('Gender:') }}</strong> {{ $person->gender->name }}</p>
                     @endisset
 
                     @isset($person->age)
-                        <p>
-                            {{ __('Age:')}}
-                            {{ $person->age }}
-                            {{ __('years') }}
-                        </p>
+                        <p><strong>{{ __('Age:') }}</strong> {{ $person->age }} {{ __('years') }}</p>
                     @endisset
 
                     @isset($person->job)
-                        <p>
-                            {{ __('Job:') }}
-                            {{ $person->job }}
-                        </p>
+                        <p><strong>{{ __('Job:') }}</strong> {{ $person->job }}</p>
                     @endisset
 
                     @isset($person->description)
-                        <p>
-                            {{ __('Commentaries:') }}
-                            <span style="white-space: pre-wrap">{{ $person->description }}</span>
-                        </p>
+                        <p><strong>{{ __('Description:') }}</strong> <span style="white-space: pre-wrap">{{ $person->description }}</span></p>
                     @endisset
+                </div>
+
+                <div class="p-6 space-y-4">
+                    <h3 class="text-xl font-semibold">{{ __('Family & Group') }}</h3>
 
                     @isset($person->motherPerson)
-                        <p>
-                            {{ __('Mother:') }}
-                            <flux:link href="{{ route('persons.show', $person->motherPerson->id) }}" wire:navigate>
-                                {{ $person->motherPerson->getName() }}
-                            </flux:link>
+                        <p><strong>{{ __('Mother:') }}</strong>
+                            <flux:link href="{{ route('persons.show', $person->motherPerson->id) }}" wire:navigate>{{ $person->motherPerson->getName() }}</flux:link>
                         </p>
                     @endisset
 
                     @isset($person->fatherPerson)
-                        <p>
-                            {{ __('Father:') }}
-                            <flux:link href="{{ route('persons.show', $person->fatherPerson->id) }}"
-                                wire:navigate>
-                                {{ $person->fatherPerson->getName() }}
-                            </flux:link>
+                        <p><strong>{{ __('Father:') }}</strong>
+                            <flux:link href="{{ route('persons.show', $person->fatherPerson->id) }}" wire:navigate>{{ $person->fatherPerson->getName() }}</flux:link>
                         </p>
                     @endisset
 
                     @isset($person->spousePerson)
-                        <p>
-                            {{ __('Spouse:') }}
-                            <flux:link href="{{ route('persons.show', $person->spousePerson->id) }}"
-                                wire:navigate>
-                                {{ $person->spousePerson->getName() }}
-                            </flux:link>
+                        <p><strong>{{ __('Spouse:') }}</strong>
+                            <flux:link href="{{ route('persons.show', $person->spousePerson->id) }}" wire:navigate>{{ $person->spousePerson->getName() }}</flux:link>
                         </p>
                     @endisset
 
                     @if($person->group)
-                        <p>
-                            {{ __('Group:') }}
-                            <flux:link href="{{ route('groups.show', $person->group) }}"
-                                wire:navigate>
-                                {{ $person->group->id }}
-                            </flux:link>
+                        <p><strong>{{ __('Group:') }}</strong>
+                            <flux:link href="{{ route('groups.show', $person->group) }}" wire:navigate>{{ $person->group->id }}</flux:link>
                         </p>
                     @endif
 
-                    @isset($person->childrenAsMother[0])
-                        <p>
-                            {{ __('Children:') }}
-                            @foreach ($person->childrenAsMother as $key => $child)
-                                @if ($key > 0) {{ ', ' }} @endif
-                                <flux:link href="{{ route('persons.show', $child->id) }}" wire:navigate>
-                                    {{ $child->getName() }}
-                                </flux:link>
+                    @php
+                        $children = $person->childrenAsMother->merge($person->childrenAsFather);
+                    @endphp
+                    @if($children->isNotEmpty())
+                        <p><strong>{{ __('Children:') }}</strong>
+                            @foreach ($children as $key => $child)
+                                @if ($key > 0), @endif
+                                <flux:link href="{{ route('persons.show', $child->id) }}" wire:navigate>{{ $child->getName() }}</flux:link>
                             @endforeach
                         </p>
-                    @endisset
-                    @isset($person->childrenAsFather[0])
-                        <p>
-                            {{ __('Children:') }}
-                            @foreach ($person->childrenAsFather as $key => $child)
-                                @if ($key > 0) {{ ', ' }} @endif
-                                <flux:link href="{{ route('persons.show', $child->id) }}" wire:navigate>
-                                    {{ $child->getName()  }}
-                                </flux:link>
-                            @endforeach
-                        </p>
-                @endisset
+                    @endif
                 </div>
-            @endisset
-            <div class="flex-1 relative pl-6 border-l-4 border-blue-500 space-y-8">
-                @foreach($person->events as $event)
-                    <div class="relative">
-                        {{-- Point sur le fil --}}
-                        <div class="absolute -left-3 top-2 w-6 h-6 bg-white border-2 border-blue-500 rounded-full"></div>
+            </div>
 
-                        {{-- Carte événement --}}
-                        <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-                            @if (!empty($event->image->path))
-                                <img src="{{ $event->image->path }}"
-                                    alt="Event image"
-                                    class="w-full h-48 object-cover" />
-                            @endif
 
-                            <div class="p-4 text-sm space-y-2">
-                                <div class="flex items-center justify-between text-gray-600">
-                                    <span>{{ $event->date->format('d M Y') }}</span>
-                                    <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">
-                                        {{ $event->eventType->name ?? 'Type inconnu' }}
-                                    </span>
+            <div class="space-y-6">
+                <div class="flex-1 relative pl-6 border-l-4 border-zinc-300 space-y-8">
+                    @foreach($person->events as $event)
+                        <div class="relative">
+
+                            <div class="date-marker"></div>
+
+                            <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+                                @if (!empty($event->image->path))
+                                    <img src="{{ $event->image->path }}"
+                                        alt="Event image"
+                                        class="w-full h-48 object-cover" />
+                                @endif
+
+                                <div class="p-4 text-sm space-y-2">
+                                    <div class="flex items-center justify-between text-gray-600">
+                                        <span>{{ $event->date->format('d M Y') }}</span>
+                                        <span class="px-2 py-1 bg-zinc-400/15 text-zinc-800 text-xs rounded">
+                                            {{ $event->eventType->name ?? 'Type inconnu' }}
+                                        </span>
+                                    </div>
+                                    <h2 class="font-semibold text-lg text-gray-800 truncate">
+                                        {{ $event->title ?? $event->eventType->name ?? 'Nom de l’évènement' }}
+                                    </h2>
+                                    @php
+                                        $city = $event->city;
+                                        $department = $city->department ?? null;
+                                        $region = $department->region ?? null;
+                                        $country = $region->country ?? null;
+                                    @endphp
+
+                                    <p class="text-gray-600">
+                                        📍 {{ $city->name ?? 'Ville inconnue' }}
+                                        @if($department)
+                                            - {{ $department->name }}
+                                        @endif
+                                        @if($region)
+                                            - {{ $region->name }}
+                                        @endif
+                                        @if($country)
+                                            ({{ $country->name }})
+                                        @endif
+                                    </p>
                                 </div>
-                                <h2 class="font-semibold text-lg text-gray-800 truncate">
-                                    {{ $event->title ?? $event->eventType->name ?? 'Nom de l’évènement' }}
-                                </h2>
-                                @php
-                                    $city = $event->city;
-                                    $department = $city->department ?? null;
-                                    $region = $department->region ?? null;
-                                    $country = $region->country ?? null;
-                                @endphp
-
-                                <p class="text-gray-600">
-                                    📍 {{ $city->name ?? 'Ville inconnue' }}
-                                    @if($department)
-                                        - {{ $department->name }}
-                                    @endif
-                                    @if($region)
-                                        - {{ $region->name }}
-                                    @endif
-                                    @if($country)
-                                        ({{ $country->name }})
-                                    @endif
-                                </p>
                             </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
