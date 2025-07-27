@@ -11,7 +11,7 @@
                 </thead>
                 <tbody>
                     @foreach ($groups as $group)
-                        <tr class="hover:bg-gray-50 border-t">
+                        <tr class="hover:bg-gray-50 dark:hover:bg-white/[7%] border-t">
                             <td>{{ $group->id }}</td>
                             <td class="text-center py-2">
                                 <flux:link :href="route('groups.show', $group->id)" class="text-blue-600 hover:underline mr-3">{{ __('See') }}</flux:link>

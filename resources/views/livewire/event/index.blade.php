@@ -30,7 +30,7 @@
                 </thead>
                 <tbody>
                     @foreach ($events as $event)
-                        <tr class="hover:bg-gray-50 border-t">
+                        <tr class="hover:bg-gray-50 dark:hover:bg-white/[7%] border-t">
                             <td>{{ $event->id }}</td>
                             <td>{{ $event->event_type_id }}</td>
                             <td>{{ $event->date->format('d F Y') }}</td>

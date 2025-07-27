@@ -1,6 +1,6 @@
 <x-layouts.app :title="__('Dashboard')">
     <div class="flex flex-col gap-6 p-6">
-        <h1 class="text-3xl font-bold text-gray-800">{{ __('Welcome') }}</h1>
+        <h1 class="text-3xl font-bold">{{ __('Welcome') }}</h1>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
             <div class="bg-white border border-gray-200 rounded-xl p-4 shadow">

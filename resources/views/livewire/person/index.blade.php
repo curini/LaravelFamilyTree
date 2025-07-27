@@ -1,6 +1,6 @@
 <x-layouts.app :title="__('Persons')">
-    <div class="p-6 bg-white shadow rounded-xl">
-        <h1 class="text-2xl font-semibold mb-6 text-gray-800">{{ __('Persons list') }}</h1>
+    <div class="p-6 shadow rounded-xl">
+        <h1 class="text-2xl font-semibold mb-6">{{ __('Persons list') }}</h1>
 
         <form class="mb-6" method="GET" action="{{ route('persons.index') }}">
             @csrf
@@ -12,7 +12,7 @@
                     placeholder="🔍 {{ __('Search by name') }}"
                 >
                 <button
-                    class="cursor-pointer flex items-center gap-2 bg-white border border-gray-300 text-gray-800 hover:text-zinc-800 dark:hover:text-white dark:hover:bg-white/[7%] hover:bg-zinc-800/5 font-semibold px-4 py-2 rounded-md transition shadow-sm"
+                    class="cursor-pointer flex items-center gap-2 border border-gray-300 hover:text-zinc-800 dark:hover:text-white dark:hover:bg-white/[7%] hover:bg-zinc-800/5 font-semibold px-4 py-2 rounded-md transition shadow-sm"
                     type="submit"
                 >
                     <span>Search</span>
@@ -20,7 +20,7 @@
                 <a
                     target="_blank"
                     href="{{ route('persons.json') }}"
-                    class="flex items-center gap-2 bg-white border border-gray-300 text-gray-800 hover:text-zinc-800 dark:hover:text-white dark:hover:bg-white/[7%] hover:bg-zinc-800/5 font-semibold px-4 py-2 rounded-md transition shadow-sm"
+                    class="flex items-center gap-2 border border-gray-300 hover:text-zinc-800 dark:hover:text-white dark:hover:bg-white/[7%] hover:bg-zinc-800/5 font-semibold px-4 py-2 rounded-md transition shadow-sm"
                 >
                     ⬇️ <span>Download</span>
                 </a>
@@ -51,7 +51,7 @@
                 </thead>
                 <tbody>
                     @forelse ($data as $person)
-                        <tr class="hover:bg-gray-50 border-t">
+                        <tr class="hover:bg-gray-50 dark:hover:bg-white/[7%] border-t">
                             <td class="p-3">{{ $person->last_name }}</td>
                             <td class="p-3">{{ $person->first_name }}</td>
                             <td class="p-3">{{ $person->age }}</td>
