@@ -22,6 +22,7 @@ class PersonSeeder extends Seeder
         $img_man = $this->updateOrCreateImage(config('persons.portrait.M.src', ''), 'portrait');
         $img_woman = $this->updateOrCreateImage(config('persons.portrait.F.src', ''), 'portrait');
         $positions = [];
+        $spouses = [];
         $start = 0;
 
         foreach ($data as $key => $value) {
@@ -51,7 +52,6 @@ class PersonSeeder extends Seeder
                     'last_name' => $name['last_name'],
                 ],
                 [
-                    'id' => $value['key'],
                     'first_name' => $name['first_name'],
                     'last_name' => $name['last_name'],
                     'job' => $value['job'] ?? '',
@@ -65,7 +65,18 @@ class PersonSeeder extends Seeder
                     'position_id' => $position->id,
                 ]
             );
+
+            $spouses[$value['key']] = ['model' => $person, 'oldspouse' => $value['oldspouse'] ?? ''];
         }
+
+        foreach ($spouses as $spouse) {
+            $this->saveSpouses($spouse['model'], $spouse['oldspouse']);
+        }
+    }
+
+    private function saveSpouses(Person $person, array $value): void
+    {
+        $person->oldSpouses()->sync($value);
     }
 
     private function setImages(array $value): void
