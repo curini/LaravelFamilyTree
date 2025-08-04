@@ -114,3 +114,9 @@ select:focus[data-flux-control] {
     left: -14px;
     top: 10px;
 }
+
+.bft-light {
+    hr {
+        margin: revert;
+    }
+}

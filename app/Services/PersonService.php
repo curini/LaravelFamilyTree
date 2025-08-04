@@ -37,7 +37,14 @@ class PersonService
 
     public function getPersons()
     {
-        return Person::with('position', 'motherPerson', 'fatherPerson', 'spousePerson')->has('position')->get();
+        return Person::select('persons.*')
+            ->join('positions', 'positions.id', '=', 'persons.position_id')
+            ->whereNotNull('persons.position_id')
+            ->whereNotNull('persons.gender_id')
+            ->whereNotNull('persons.image_id')
+            ->with(['position', 'motherPerson', 'fatherPerson', 'spousePerson', 'portrait', 'oldSpouses', 'gender'])
+            ->orderBy('positions.y', 'asc')
+            ->get();
     }
 
     private function countPersons()

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\EventTypesEnum;
 use App\Services\PersonService;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\familyTreeResource;
 
 class PageController extends Controller
 {
@@ -28,8 +29,16 @@ class PageController extends Controller
     public function familyTree()
     {
         $person = new PersonService();
+        $people = $person->getPersons();
+        $families = familyTreeResource::collection(
+            $people->map(function ($person, $index) {
+                $person->order_id = $index + 1;
+                return $person;
+            })
+        );
+
         return view('familyTree', [
-            'persons' => $person->getPersons(),
+            'persons' => familyTreeResource::collection($families),
         ]);
     }
 }
