@@ -48,6 +48,11 @@ class Person extends Model
         return $this->belongsTo(Person::class, 'spouse_id');
     }
 
+    public function oldSpouses()
+    {
+        return $this->belongsToMany(Person::class, 'old_spouse_person', 'person_id', 'spouse_id');
+    }
+
     public function motherPerson()
     {
         return $this->belongsTo(Person::class, 'mother_id');
