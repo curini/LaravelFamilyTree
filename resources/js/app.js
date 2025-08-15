@@ -55,10 +55,6 @@ FamilyTree.templates.main.node =
     '<rect x="0" y="0" height="20" width="{w}" fill="#b1b9be" stroke-width="1" stroke="#b1b9be" rx="5" ry="5"></rect>' +
     '<line x1="0" y1="20" x2="250" y2="20" stroke-width="5" stroke="#b1b9be"></line>';
 
-FamilyTree.templates.main.field_0 =
-    '<text ' +
-    FamilyTree.attr.width +
-    ' ="250" style="font-size: 14px;" font-variant="all-small-caps" fill="white" x="125" y="16" text-anchor="middle">{val}</text>';
 FamilyTree.templates.main.field_1 =
     '<text ' +
     FamilyTree.attr.width +
@@ -76,9 +72,7 @@ FamilyTree.templates.main.img_0 = `<use xlink:href="#base_img_0_stroke" />
       <image preserveAspectRatio="xMidYMid slice" clip-path="url(#base_img_0)" xlink:href="{val}" x="10" y="26" width="72" height="72"></image>`;
 FamilyTree.templates.main_male = Object.assign({}, FamilyTree.templates.main);
 FamilyTree.templates.main_male.node =
-    '<rect x="0" y="0" height="{h}" width="{w}" fill="#ffffff" stroke-width="3" stroke="#6bb4df" rx="5" ry="5"></rect>' +
-    '<rect x="0" y="0" height="20" width="{w}" fill="#6bb4df" stroke-width="1" stroke="#6bb4df" rx="5" ry="5"></rect>' +
-    '<line x1="0" y1="20" x2="250" y2="20" stroke-width="5" stroke="#6bb4df"></line>';
+    '<rect x="0" y="0" height="{h}" width="{w}" fill="#ffffff" stroke-width="3" stroke="#6bb4df" rx="5" ry="5"></rect>';
 FamilyTree.templates.main_male.img_0 = `<use xlink:href="#base_img_0_stroke" />
        <circle id="base_img_0_stroke" fill="#6bb4df" cx="45" cy="62" r="37"/>
       <image preserveAspectRatio="xMidYMid slice" clip-path="url(#base_img_0)" xlink:href="{val}" x="10" y="26" width="72" height="72"></image>`;
@@ -88,9 +82,7 @@ FamilyTree.templates.main_male_child.link =
 
 FamilyTree.templates.main_female = Object.assign({}, FamilyTree.templates.main_male);
 FamilyTree.templates.main_female.node =
-    '<rect x="0" y="0" height="{h}" width="{w}" fill="#ffffff" stroke-width="3" stroke="#cb4aaf" rx="5" ry="5"></rect>' +
-    '<rect x="0" y="0" height="20" width="{w}" fill="#cb4aaf" stroke-width="1" stroke="#cb4aaf" rx="5" ry="5"></rect>' +
-    '<line x1="0" y1="20" x2="250" y2="20" stroke-width="5" stroke="#cb4aaf"></line>';
+    '<rect x="0" y="0" height="{h}" width="{w}" fill="#ffffff" stroke-width="3" stroke="#cb4aaf" rx="5" ry="5"></rect>';
 FamilyTree.templates.main_female.img_0 = `<use xlink:href="#base_img_0_stroke" />
        <circle id="base_img_0_stroke" fill="#cb4aaf" cx="45" cy="62" r="37"/>
       <image preserveAspectRatio="xMidYMid slice" clip-path="url(#base_img_0)" xlink:href="{val}" x="10" y="26" width="72" height="72"></image>`;
@@ -119,10 +111,6 @@ FamilyTree.templates.single.defs = `<style>
     </style>`;
 FamilyTree.templates.single.node =
     '<circle cx="100" cy="100" r="100" fill="white" stroke-width="1" stroke="#aeaeae"></circle>';
-FamilyTree.templates.single.field_0 =
-    '<text ' +
-    FamilyTree.attr.width +
-    ' ="160" style="font-size: 14px;" font-variant="all-small-caps"  font-weight="bold" fill="black" x="100" y="115" text-anchor="middle">{val}</text>';
 FamilyTree.templates.single.field_1 =
     '<text ' +
     FamilyTree.attr.width +
