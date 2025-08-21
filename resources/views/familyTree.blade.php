@@ -1,18 +1,26 @@
 <x-layouts.app :title="__('Family Tree')">
-    <div id="familyTreeCanvas"></div>
-    @push('scripts')
-        <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var family = new FamilyTree(document.getElementById("familyTreeCanvas"), {
+    <div id="familyTreeCanvas" x-data x-init="window.initFamilyTree()" wire:ignore></div>
+    <script>
+        window.initFamilyTree = function() {
+            const familyContent = document.getElementById("familyTreeCanvas");
+
+            if (!familyContent) {
+                return;
+            }
+
+            if (window.familyMap) {
+                window.familyMap.remove();
+            }
+
+            window.familyMap = new FamilyTree(familyContent, {
                 template: "main",
-                scaleInitial: 0.45,
+                scaleInitial: 0.60,
                 mouseScrool: FamilyTree.none,
                 menu: {
                     pdf: { text: "Export PDF" },
                     png: { text: "Export PNG" },
                 },
                 nodeBinding: {
-                    field_0: "relationship",
                     field_1: "name",
                     field_2: "bdate",
                     field_3: "id",
@@ -44,13 +52,13 @@
                 }
             });
 
-            family.on('render-link', function (sender, args) {
+            window.familyMap.on('render-link', function (sender, args) {
                 if (args.cnode.ppid != undefined) {
                     args.html += '<use xlink:href="#heart" x="' + args.p.xa + '" y="' + args.p.ya + '"/>';
                 }
             });
 
-            family.on('field', function (sender, args) {
+            window.familyMap.on('field', function (sender, args) {
                 if (args.name == "bdate") {
                     if (args.data["ddate"]) {
                         var bdate = args.data["bdate"];
@@ -63,8 +71,7 @@
             });
 
             const persons = @json($persons);
-            family.load(persons);
-        });
-        </script>
-    @endpush
+            window.familyMap.load(persons);
+        };
+    </script>
 </x-layouts.app>

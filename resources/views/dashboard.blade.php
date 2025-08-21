@@ -5,7 +5,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
             <div class="bg-white border border-gray-200 rounded-xl p-4 shadow">
                 <div class="aspect-video bg-gray-100 flex items-center justify-center rounded-lg">
-                    <div id="map" class="w-full rounded-lg shadow"></div>
+                    <div id="map" class="w-full rounded-lg shadow" x-data x-init="window.initMap()" wire:ignore></div>
                 </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -22,9 +22,7 @@
             </div>
         </div>
     </div>
-    @push('scripts')
-        <script>
-
+    <script>
         window.initMap = function() {
             const mapElement = document.getElementById('map');
 
@@ -58,10 +56,5 @@
                 });
             }
         }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            window.initMap();
-        });
-        </script>
-    @endpush
+    </script>
 </x-layouts.app>
