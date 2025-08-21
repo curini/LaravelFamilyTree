@@ -66,7 +66,7 @@ class PersonSeeder extends Seeder
                 ]
             );
 
-            $spouses[$value['key']] = ['model' => $person, 'oldspouse' => $value['oldspouse'] ?? ''];
+            $spouses[$value['key']] = ['model' => $person, 'oldspouse' => $value['oldspouse'] ?? []];
         }
 
         foreach ($spouses as $spouse) {
