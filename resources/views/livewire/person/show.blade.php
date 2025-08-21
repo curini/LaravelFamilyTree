@@ -84,7 +84,7 @@
                             <div class="date-marker"></div>
 
                             <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-                                <flux:link href="{{ route('events.show', $event->id) }}" wire:navigate>
+                                <flux:link href="{{ route('events.show', $event->id) }}" variant="subtle" wire:navigate>
                                     @if (!empty($event->image->path))
                                         <img src="{{ $event->image->path }}"
                                             alt="Event image"
