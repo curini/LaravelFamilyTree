@@ -25,6 +25,7 @@ class familyTreeResource extends JsonResource
             'gender' => $gender,
             'img' => $this->portrait->path,
             'tags' => [$this->getTags($gender)],
+            'map' => route('persons.show', $this->id),
         ];
 
         $attributes = $this->addOptionalAttribute($attributes, 'mid', $this->mother_id);
