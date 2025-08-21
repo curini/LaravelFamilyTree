@@ -48,7 +48,7 @@ class EventController extends Controller
      */
     public function show(string $id): View
     {
-        $event = Event::with('person')->findOrFail($id);
+        $event = Event::with('person', 'image', 'city', 'eventType')->findOrFail($id);
         return view('livewire.event.show', compact('event'));
     }
 
