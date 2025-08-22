@@ -13,7 +13,8 @@
 
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
-                    <flux:navlist.item icon="home" :href="route('home')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                    <flux:navlist.item icon="home" :href="route('home')" :current="request()->routeIs('home')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                    <flux:navlist.item icon="book-open" :href="route('familyTree')" :current="request()->routeIs('familyTree')" wire:navigate>{{ __('Family Tree') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 
@@ -25,6 +26,14 @@
                 </flux:navlist.item>
                 <flux:navlist.item icon="user-plus" :href="route('persons.create')" :current="request()->routeIs('persons.create')" wire:navigate>
                 {{ __('Create person') }}
+                </flux:navlist.item>
+                <flux:menu.separator />
+                <flux:navlist.item icon="folder-git-2" :href="route('groups.index')" :current="request()->routeIs('groups.index')" wire:navigate>
+                {{ __('Groups') }}
+                </flux:navlist.item>
+                <flux:menu.separator />
+                <flux:navlist.item icon="layout-grid" :href="route('events.index')" :current="request()->routeIs('events.index')" wire:navigate>
+                {{ __('Events') }}
                 </flux:navlist.item>
             </flux:navlist>
 

@@ -1,3 +1,4 @@
+@import 'https://unpkg.com/leaflet/dist/leaflet.css';
 @import "tailwindcss";
 @import "../../vendor/livewire/flux/dist/flux.css";
 
@@ -67,3 +68,55 @@ select:focus[data-flux-control] {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+#map {
+    height: 500px;
+}
+
+.my-text-ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+    white-space: nowrap;
+}
+
+.person-bg {
+    fill: white;
+    stroke: blue;
+    transition: fill 0.2s ease-in-out;
+}
+
+.person-link:hover .person-bg {
+    fill: #e0f0ff;
+}
+
+.date-marker {
+    border-style: var(--tw-border-style);
+    border-width: 2px;
+    border-color: var(--color-zinc-300);
+    width: calc(var(--spacing)*6);
+    height: calc(var(--spacing)*6);
+    left: calc(var(--spacing)*-3);
+    top: calc(var(--spacing)*2);
+    position: absolute;
+    border-radius: 3.40282e38px;
+    background-color: var(--color-white);
+}
+
+.date-marker::before {
+    content: '';
+    background-color: var(--color-zinc-300);
+    width: 14px;
+    height: 2px;
+    display: block;
+    position: absolute;
+    left: -14px;
+    top: 10px;
+}
+
+.bft-light {
+    hr {
+        margin: revert;
+    }
+}

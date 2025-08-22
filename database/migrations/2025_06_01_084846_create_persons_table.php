@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,25 +12,18 @@ return new class extends Migration
     {
         Schema::create('persons', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('first_name');
+            $table->string('last_name');
             $table->string('job')->nullable();
-            $table->date('birth')->nullable();
-            $table->string('birthplace')->nullable();
-            $table->string('birthcountry', 3)->default('FRA');
-            $table->date('death')->nullable();
-            $table->string('deathplace')->nullable();
-            $table->string('deathcountry', 3)->nullable();
-            $table->enum('gender', ['F', 'M'])->default('M');
-            $table->unsignedInteger('father')->nullable();
-            $table->unsignedInteger('mother')->nullable();
-            $table->unsignedInteger('spouse')->nullable();
-            $table->unsignedInteger('generation')->default(1);
+            $table->string('description')->nullable();
             $table->unsignedInteger('age')->default(0);
-            $table->string('photo')->nullable();
-            $table->string('birth_act')->nullable();
-            $table->string('death_act')->nullable();
-            $table->string('other_img')->nullable();
-            $table->foreignId('group')->nullable()->constrained('groups');
+            $table->foreignId('position_id')->references('id')->on('positions');
+            $table->foreignId('gender_id')->references('id')->on('genders');
+            $table->foreignId('group_id')->nullable()->constrained('groups');
+            $table->foreignId('father_id')->nullable()->constrained('persons');
+            $table->foreignId('mother_id')->nullable()->constrained('persons');
+            $table->unsignedInteger('spouse_id')->nullable();
+            $table->foreignId('image_id')->nullable()->constrained('images');
             $table->timestamps();
         });
     }

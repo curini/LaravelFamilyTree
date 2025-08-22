@@ -23,5 +23,6 @@ yarn-error.log
 /.zed
 /* Custom configuration */
 /config/persons.php
+/config/localities.php
 /public/img
 
