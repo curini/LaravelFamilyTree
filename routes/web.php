@@ -4,14 +4,11 @@ use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{PersonController, GroupController};
+use App\Http\Controllers\{EventController, PersonController, GroupController, PageController};
 
-Route::view('/', 'dashboard')
+Route::get('/', [PageController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])
     ->name('home');
-
-
-
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
@@ -19,10 +16,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/profile', Profile::class)->name('settings.profile');
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
-    Route::get('persons/json', [ PersonController::class, 'json'])->name('persons.json');
+    Route::get('persons/json', [PersonController::class, 'json'])->name('persons.json');
+    Route::get('familyTree', [PageController::class, 'familyTree'])->name('familyTree');
     Route::resource('persons', PersonController::class);
-
+    Route::resource('events', EventController::class);
     Route::resource('groups', GroupController::class);
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
