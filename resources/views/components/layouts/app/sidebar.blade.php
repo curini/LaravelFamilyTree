@@ -20,6 +20,7 @@
 
             <flux:spacer />
 
+            @admin
             <flux:navlist variant="outline">
                 <flux:navlist.item icon="users" :href="route('persons.index')" :current="request()->routeIs('persons.index')" wire:navigate>
                 {{ __('Persons') }}
@@ -36,6 +37,7 @@
                 {{ __('Events') }}
                 </flux:navlist.item>
             </flux:navlist>
+            @endadmin
 
             <!-- Desktop User Menu -->
             <flux:dropdown position="bottom" align="start">
