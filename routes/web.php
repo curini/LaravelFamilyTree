@@ -18,9 +18,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 
     Route::get('familyTree', [PageController::class, 'familyTree'])->name('familyTree');
-    Route::get('persons/{person}', [PersonController::class, 'show'])->name('persons.show');
-    Route::get('events/{event}', [EventController::class, 'show'])->name('events.show');
-    Route::get('groups/{group}', [GroupController::class, 'show'])->name('groups.show');
 
     Route::middleware(['admin'])->group(function () {
         Route::get('persons/json', [PersonController::class, 'json'])->name('persons.json');
@@ -28,6 +25,10 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('events', EventController::class)->except(['show']);
         Route::resource('groups', GroupController::class)->except(['show']);
     });
+
+    Route::get('persons/{person}', [PersonController::class, 'show'])->name('persons.show');
+    Route::get('events/{event}', [EventController::class, 'show'])->name('events.show');
+    Route::get('groups/{group}', [GroupController::class, 'show'])->name('groups.show');
 });
 
 require __DIR__ . '/auth.php';
