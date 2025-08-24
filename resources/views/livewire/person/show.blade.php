@@ -3,7 +3,9 @@
 
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold">{{ $person->getName() }}</h1>
-            <a href="{{ route('persons.edit', $person->id) }}" class="text-blue-600 hover:underline text-sm" wire:navigate>{{ __('Edit') }}</a>
+            @admin
+                <a href="{{ route('persons.edit', $person->id) }}" class="text-blue-600 hover:underline text-sm" wire:navigate>{{ __('Edit') }}</a>
+            @endadmin
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">

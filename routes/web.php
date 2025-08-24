@@ -16,11 +16,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/profile', Profile::class)->name('settings.profile');
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
-    Route::get('persons/json', [PersonController::class, 'json'])->name('persons.json');
+
     Route::get('familyTree', [PageController::class, 'familyTree'])->name('familyTree');
-    Route::resource('persons', PersonController::class);
-    Route::resource('events', EventController::class);
-    Route::resource('groups', GroupController::class);
+    Route::get('persons/{person}', [PersonController::class, 'show'])->name('persons.show');
+    Route::get('events/{event}', [EventController::class, 'show'])->name('events.show');
+    Route::get('groups/{group}', [GroupController::class, 'show'])->name('groups.show');
+
+    Route::middleware(['admin'])->group(function () {
+        Route::get('persons/json', [PersonController::class, 'json'])->name('persons.json');
+        Route::resource('persons', PersonController::class)->except(['show']);
+        Route::resource('events', EventController::class)->except(['show']);
+        Route::resource('groups', GroupController::class)->except(['show']);
+    });
 });
 
 require __DIR__ . '/auth.php';
