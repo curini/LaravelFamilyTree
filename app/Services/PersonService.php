@@ -35,7 +35,7 @@ class PersonService
         ];
     }
 
-    public function getPersons()
+    public function getPersons(): mixed
     {
         return Person::select('persons.*')
             ->join('positions', 'positions.id', '=', 'persons.position_id')
@@ -47,17 +47,17 @@ class PersonService
             ->get();
     }
 
-    private function countPersons()
+    private function countPersons(): mixed
     {
         return Person::count();
     }
 
-    private function countDistinctLastNames()
+    private function countDistinctLastNames(): mixed
     {
         return Person::distinct('last_name')->where('last_name', '!=', '')->count('last_name');
     }
 
-    private function getMostFrequentLastName()
+    private function getMostFrequentLastName(): mixed
     {
         return Person::select('last_name', DB::raw('COUNT(*) as total'))
             ->where('last_name', '!=', '')
@@ -66,7 +66,7 @@ class PersonService
             ->first();
     }
 
-    private function getYounger(bool $is_deceased = false)
+    private function getYounger(bool $is_deceased = false): mixed
     {
         return Person::select('age')
             ->whereHas('events', function ($query) {
@@ -95,7 +95,7 @@ class PersonService
             ->first();
     }
 
-    private function getOlder(bool $is_deceased = false)
+    private function getOlder(bool $is_deceased = false): mixed
     {
         return Person::select('age')
             ->whereHas('events', function ($query) {
