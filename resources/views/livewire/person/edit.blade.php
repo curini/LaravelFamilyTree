@@ -1,6 +1,6 @@
 <x-layouts.app :title="__('Edit person')">
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
-        <h1>{{ __('Edit person') }}</h1>
+        <h1 class="text-3xl font-bold">{{ __('Edit person') }}</h1>
         <form class="mb-4" method="POST" action="{{ route('persons.update', $person) }}">
             @csrf
             @method('PUT')
