@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\RolesEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -18,7 +20,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['name', 'email', 'password', 'role_id'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -38,6 +40,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::saving(function ($model) {
+            $model->role_id = $model->role_id ?? Role::where('name', RolesEnum::USER)->first();
+        });
     }
 
     /**

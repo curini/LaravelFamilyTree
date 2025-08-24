@@ -25,6 +25,12 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        if (!Role::where('name', RolesEnum::USER)->exists()) {
+            Role::factory()->create([
+                'name' => RolesEnum::USER,
+            ]);
+        }
+
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
