@@ -16,11 +16,9 @@ class Person extends Model
         'description',
         'gender_id',
         'spouse_id',
-        'group_id',
         'mother_id',
         'father_id',
         'image_id',
-        'position_id',
         'age',
     ];
 
@@ -31,16 +29,6 @@ class Person extends Model
         self::saving(function ($model) {
             $model->age = $model->calculateAge($model->birth(), $model->death());
         });
-    }
-
-    public function group()
-    {
-        return $this->belongsTo(Group::class);
-    }
-
-    public function position()
-    {
-        return $this->belongsTo(Position::class);
     }
 
     public function spousePerson()

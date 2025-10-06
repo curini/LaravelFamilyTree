@@ -6,7 +6,6 @@ use App\Models\Gender;
 use App\Models\Image;
 use Illuminate\Database\Seeder;
 use App\Models\Person;
-use App\Models\Position;
 
 class PersonSeeder extends Seeder
 {
@@ -21,27 +20,15 @@ class PersonSeeder extends Seeder
 
         $img_man = $this->updateOrCreateImage(config('persons.portrait.M.src', ''), 'portrait');
         $img_woman = $this->updateOrCreateImage(config('persons.portrait.F.src', ''), 'portrait');
-        $positions = [];
         $spouses = [];
-        $start = 0;
 
         foreach ($data as $key => $value) {
-            if ($key == 0) {
-                $start = $value['generation'];
-            }
-            if (empty($positions[$value['generation']])) {
-                $positions[$value['generation']] = 100;
-            }
-
             $gender = Gender::where(['value' => $value['gender'] ?? 'M'])->firstOrFail();
             $image = isset($value['photo']) ? $this->updateOrCreateImage($value['photo'], 'portrait') : null;
 
             $this->setImages($value);
 
             $name = $this->setNames($value['name']);
-            $y = ($value['generation'] - $start) * 75 + 40;
-            $position = $this->setPosition($value['x'] ?? $positions[$value['generation']], $y);
-            $positions[$value['generation']] += 240;
 
             $default_image = isset($value['gender']) && $value['gender'] == 'F' ? $img_woman : $img_man;
 
@@ -57,12 +44,10 @@ class PersonSeeder extends Seeder
                     'job' => $value['job'] ?? '',
                     'description' => $value['description'] ?? '',
                     'gender_id' => $gender->id,
-                    'group_id' => $value['group'] ?? null,
                     'father_id' => $value['father'] ?? null,
                     'mother_id' => $value['mother'] ?? null,
                     'spouse_id' => $value['spouse'] ?? null,
                     'image_id' => isset($image) ? $image->id : $default_image->id,
-                    'position_id' => $position->id,
                 ]
             );
 
@@ -113,20 +98,6 @@ class PersonSeeder extends Seeder
             }
         }
         return ['first_name' => trim($name), 'last_name' => trim($lastname)];
-    }
-
-    private function setPosition(float $x, float $y): Position
-    {
-        return Position::updateOrCreate(
-            [
-                'X' => $x,
-                'y' => $y,
-            ],
-            [
-                'X' => $x,
-                'y' => $y,
-            ]
-        );
     }
 
     private function updateOrCreateImage(string $path, string $name): Image
