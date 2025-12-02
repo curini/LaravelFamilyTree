@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\EventsEnum;
 use App\Models\Gender;
 use App\Models\Image;
 use Illuminate\Database\Seeder;
@@ -67,21 +68,10 @@ class PersonSeeder extends Seeder
 
     private function setImages(array $value): void
     {
-        $types = [
-            'birth_img' => 'birth',
-            'death_img' => 'death',
-            'house_img' => 'house',
-            'oldhouse_img' => 'house',
-            'wedding_img' => 'wedding',
-            'otherwedding_img' => 'wedding',
-            'papers_img' => 'papers',
-            'otherpapers_img' => 'papers',
-            'deathchild_img' => 'death',
-            'military_img' => 'military',
-        ];
-        foreach ($types as $key => $type) {
-            if (isset($value[$key])) {
-                $this->updateOrCreateImage($value[$key], $type);
+        $types = EventsEnum::cases();
+        foreach ($types as $type) {
+            if (isset($value[$type->name . '_img'])) {
+                $this->updateOrCreateImage($value[$type->name . '_img'], $type->value);
             }
         }
     }
