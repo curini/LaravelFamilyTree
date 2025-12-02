@@ -11,7 +11,9 @@ class Person extends Model
     protected $table = 'persons';
 
     protected $fillable = [
-        'name',
+        'last_name',
+        'first_name',
+        'first_names',
         'job',
         'description',
         'gender_id',

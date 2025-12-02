@@ -35,11 +35,12 @@ class PersonSeeder extends Seeder
             $person = Person::updateOrCreate(
                 [
                     'id' => $value['key'],
-                    'first_name' => $name['first_name'],
+                    'first_names' => $name['first_names'],
                     'last_name' => $name['last_name'],
                 ],
                 [
                     'first_name' => $name['first_name'],
+                    'first_names' => $name['first_names'],
                     'last_name' => $name['last_name'],
                     'job' => $value['job'] ?? '',
                     'description' => $value['description'] ?? '',
@@ -97,7 +98,11 @@ class PersonSeeder extends Seeder
                 $name = str_replace($value, '', $name);
             }
         }
-        return ['first_name' => trim($name), 'last_name' => trim($lastname)];
+        return [
+            'first_name' => explode(' ', trim($name))[0],
+            'first_names' => trim($name),
+            'last_name' => trim($lastname),
+        ];
     }
 
     private function updateOrCreateImage(string $path, string $name): Image
