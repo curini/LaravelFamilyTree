@@ -19,6 +19,8 @@
                 <div class="p-6 space-y-4">
                     <h3 class="text-xl font-semibold">{{ __('Personal Information') }}</h3>
 
+                    <p><strong>{{ __('First names:') }}</strong> {{ $person->first_names }}</p>
+
                     @isset($person->gender)
                         <p><strong>{{ __('Gender:') }}</strong> {{ $person->gender->name }}</p>
                     @endisset
