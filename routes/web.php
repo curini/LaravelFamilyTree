@@ -22,11 +22,11 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['admin'])->group(function () {
         Route::get('persons/json', [PersonController::class, 'json'])->name('persons.json');
         Route::resource('persons', PersonController::class)->except(['show']);
-        Route::resource('events', EventController::class)->except(['show']);
     });
 
     Route::get('persons/{person}', [PersonController::class, 'show'])->name('persons.show');
     Route::get('events/{event}', [EventController::class, 'show'])->name('events.show');
+    Route::get('events', [EventController::class, 'index'])->name('events.index');
 });
 
 require __DIR__ . '/auth.php';
