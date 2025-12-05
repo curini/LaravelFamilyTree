@@ -5,6 +5,7 @@ namespace App\Services;
 use App\EventTypesEnum;
 use App\GendersEnum;
 use App\Models\City;
+use App\Models\EventType;
 use App\Models\Gender;
 use App\Models\Person;
 use Illuminate\Support\Facades\DB;
@@ -29,9 +30,10 @@ class PersonService
         $fathers = Person::where('gender_id', data_get($maleGender, 'id'))->pluck('first_name', 'id');
         $spouses = Person::all()->pluck('first_name', 'id');
         $cities = City::all();
+        $eventTypes = EventType::all();
         $title = isset($id) ? 'Edit person' : 'New person';
 
-        return compact('person', 'mothers', 'fathers', 'spouses', 'cities', 'title');
+        return compact('person', 'mothers', 'fathers', 'spouses', 'cities', 'title', 'eventTypes');
     }
 
     public function getPersonsStats(): array
