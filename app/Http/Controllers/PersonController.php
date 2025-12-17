@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdatePersonRequest;
 use Illuminate\Http\Request;
 use App\Models\{Person, Group};
 use App\Services\PersonService;
@@ -90,7 +91,7 @@ class PersonController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(UpdatePersonRequest $request, string $id): RedirectResponse
     {
         Person::findOrFail($id)->update($request->all());
 
