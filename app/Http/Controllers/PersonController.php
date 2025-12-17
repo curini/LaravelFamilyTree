@@ -109,9 +109,6 @@ class PersonController extends Controller
 
     public function json()
     {
-        $person = Person::all()->toArray();
-        $group = Group::all()->toArray();
-
-        return response()->json(array_merge($person, $group));
+        return response()->json(Person::all()->toArray());
     }
 }

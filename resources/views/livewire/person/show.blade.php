@@ -19,6 +19,8 @@
                 <div class="p-6 space-y-4">
                     <h3 class="text-xl font-semibold">{{ __('Personal Information') }}</h3>
 
+                    <p><strong>{{ __('First names:') }}</strong> {{ $person->first_names }}</p>
+
                     @isset($person->gender)
                         <p><strong>{{ __('Gender:') }}</strong> {{ $person->gender->name }}</p>
                     @endisset
@@ -37,7 +39,7 @@
                 </div>
 
                 <div class="p-6 space-y-4">
-                    <h3 class="text-xl font-semibold">{{ __('Family & Group') }}</h3>
+                    <h3 class="text-xl font-semibold">{{ __('Family') }}</h3>
 
                     @isset($person->motherPerson)
                         <p><strong>{{ __('Mother:') }}</strong>
@@ -56,12 +58,6 @@
                             <flux:link href="{{ route('persons.show', $person->spousePerson->id) }}" wire:navigate>{{ $person->spousePerson->getName() }}</flux:link>
                         </p>
                     @endisset
-
-                    @if($person->group)
-                        <p><strong>{{ __('Group:') }}</strong>
-                            <flux:link href="{{ route('groups.show', $person->group) }}" wire:navigate>{{ $person->group->id }}</flux:link>
-                        </p>
-                    @endif
 
                     @php
                         $children = $person->childrenAsMother->merge($person->childrenAsFather);

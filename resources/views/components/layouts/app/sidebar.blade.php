@@ -29,10 +29,6 @@
                 {{ __('Create person') }}
                 </flux:navlist.item>
                 <flux:menu.separator />
-                <flux:navlist.item icon="folder-git-2" :href="route('groups.index')" :current="request()->routeIs('groups.index')" wire:navigate>
-                {{ __('Groups') }}
-                </flux:navlist.item>
-                <flux:menu.separator />
                 <flux:navlist.item icon="layout-grid" :href="route('events.index')" :current="request()->routeIs('events.index')" wire:navigate>
                 {{ __('Events') }}
                 </flux:navlist.item>

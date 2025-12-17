@@ -4,21 +4,19 @@
         <form class="mb-4" method="POST" action="{{ isset($person->id) ? route('persons.update', $person) : route('persons.store', $person) }}">
             @csrf
             @method('PUT')
-            <form class="mb-4" method="POST" action="{{ route('persons.store') }}">
-            @csrf
-            <div class="flex gap-4 mt-4">
+            <div class="flex gap-4 mt-4 p-4">
                 <label for="first_name">
                     {{ __('First name') }}
                 </label>
                 <input class="input w-full border border-zinc-200" type="text" name="first_name" value="{{ $person->first_name }}">
             </div>
-            <div class="flex gap-4 mt-4">
+            <div class="flex gap-4 mt-4 p-4">
                 <label for="last_name">
                     {{ __('Last name') }}
                 </label>
                 <input class="input w-full border border-zinc-200" type="text" name="last_name" value="{{ $person->last_name }}">
             </div>
-            <div class="flex gap-4 mt-4">
+            <div class="flex gap-4 mt-4 p-4">
                 <label for="father">
                     {{ __('Father') }}
                 </label>
@@ -31,7 +29,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="flex gap-4 mt-4">
+            <div class="flex gap-4 mt-4 p-4">
                 <label for="mother">
                     {{ __('Mother') }}
                 </label>
@@ -44,7 +42,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="flex gap-4 mt-4">
+            <div class="flex gap-4 mt-4 p-4">
                 <label for="gender">
                     {{ __('Gender') }}
                 </label>
@@ -53,7 +51,7 @@
                     <option value="F" @if ($person->gender == 'F') selected @endif>{{ __('Female') }}</option>
                 </select>
             </div>
-            <div class="flex gap-4 mt-4">
+            <div class="flex gap-4 mt-4 p-4">
                 <label for="job">
                     {{ __('Job') }}
                 </label>
@@ -61,31 +59,13 @@
             </div>
 
             @if ($person->has('events'))
-                @foreach ($person->events as $key => $event)
-                    <h2>{{ $event->eventType->name }}</h2>
-                    <div class="flex gap-4 mt-4">
-                        <label for="events.{{ $key }}.date">
-                            {{ __('Date') }}
-                        </label>
-                        <input class="input w-full border border-zinc-200" type="date" name="events.{{ $key }}.date" value="{{ $event->date ? $event->date->format('Y-m-d') : '' }}">
-                    </div>
-                    <div class="flex gap-4 mt-4">
-                        <label for="events.{{ $key }}.city_id">
-                            {{ __('City') }}
-                        </label>
-                        <select class="input w-full border border-zinc-200" name="events.{{ $key }}.city_id">
-                            <option value="">{{ __('None') }}</option>
-                            @foreach($cities as $code => $city)
-                                <option value="{{ $code }}" @if ($event->city_id == $code) selected @endif>
-                                    {{ $city->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                @foreach ($person->events as $event)
+                    <livewire:events.update-event :event="$event"
+                    :cities="$cities" :eventTypes="$eventTypes" />
                 @endforeach
             @endif
 
-            <div class="flex gap-4 mt-4">
+            <div class="flex gap-4 mt-4 p-4">
                 <label for="spouse">
                     {{ __('Spouse') }}
                 </label>
@@ -100,7 +80,7 @@
             </div>
 
             @if ($person->portrait)
-                <div class="flex gap-4 mt-4">
+                <div class="flex gap-4 mt-4 p-4">
                     <label for="portrait.path">
                         {{ __('Photo') }}
                     </label>
@@ -108,14 +88,14 @@
                 </div>
             @endif
 
-            <div class="flex gap-4 mt-4">
+            <div class="flex gap-4 mt-4 p-4">
                 <label for="age">
                     {{ __('Age') }}
                 </label>
                 <input class="input w-full border border-zinc-200" type="number" name="age" value="{{ $person->age }}">
             </div>
 
-            <div class="mt-4">
+            <div class="mt-4 p-4">
                 <button class="bg-blue-500 hover:bg-zinc-700 text-white font-bold py-2 px-4 rounded" type="submit">
                     {{ __('Save') }}
                 </button>

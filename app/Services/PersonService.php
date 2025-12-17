@@ -5,8 +5,8 @@ namespace App\Services;
 use App\EventTypesEnum;
 use App\GendersEnum;
 use App\Models\City;
+use App\Models\EventType;
 use App\Models\Gender;
-use App\Models\Group;
 use App\Models\Person;
 use Illuminate\Support\Facades\DB;
 
@@ -29,11 +29,11 @@ class PersonService
         $mothers = Person::where('gender_id', data_get($femaleGender, 'id'))->pluck('first_name', 'id');
         $fathers = Person::where('gender_id', data_get($maleGender, 'id'))->pluck('first_name', 'id');
         $spouses = Person::all()->pluck('first_name', 'id');
-        $groups = Group::all()->pluck('id', 'id');
         $cities = City::all();
+        $eventTypes = EventType::all();
         $title = isset($id) ? 'Edit person' : 'New person';
 
-        return compact('person', 'mothers', 'fathers', 'spouses', 'groups', 'cities', 'title');
+        return compact('person', 'mothers', 'fathers', 'spouses', 'cities', 'title', 'eventTypes');
     }
 
     public function getPersonsStats(): array
@@ -58,12 +58,9 @@ class PersonService
     public function getPersons(): mixed
     {
         return Person::select('persons.*')
-            ->join('positions', 'positions.id', '=', 'persons.position_id')
-            ->whereNotNull('persons.position_id')
             ->whereNotNull('persons.gender_id')
             ->whereNotNull('persons.image_id')
-            ->with(['position', 'motherPerson', 'fatherPerson', 'spousePerson', 'portrait', 'oldSpouses', 'gender'])
-            ->orderBy('positions.y', 'asc')
+            ->with(['motherPerson', 'fatherPerson', 'spousePerson', 'portrait', 'oldSpouses', 'gender'])
             ->get();
     }
 
