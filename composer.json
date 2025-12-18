@@ -8,8 +8,15 @@
         "framework"
     ],
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/curini/password"
+        }
+    ],
     "require": {
         "php": "^8.2",
+        "curini/password": "dev-main",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "livewire/flux": "^2.1.1",
