@@ -49,4 +49,5 @@
             <flux:link :href="route('register')" wire:navigate>{{ __('Sign up') }}</flux:link>
         </div>
     @endif
+    @include('socialite::login')
 </div>
