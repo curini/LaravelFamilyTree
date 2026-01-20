@@ -57,6 +57,7 @@ class EventSeeder extends Seeder
                 'image_id' => $image->id ?? null,
                 'event_type_id' => $eventType->id,
                 'date' => new \DateTime($person['date']),
+                'description' => $person['description'] ?? null,
                 'city_id' => $city->id ?? null,
             ]
         );

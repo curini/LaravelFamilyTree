@@ -5,9 +5,9 @@
                 {{ $event->eventType->name }}
             </h1>
         @endif
-         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             @if ($event->image)
-               <div class="space-y-6">
+                <div class="space-y-6">
                     <img src="{{ $event->image->path }}" alt="">
                 </div>
             @endif
@@ -19,6 +19,11 @@
                             {{ ' to ' . $event->city->name }}
                         @endif
                     </p>
+                    @if ($event->description)
+                        <p>
+                            {{ ' ' . $event->description }}
+                        </p>
+                    @endif
                     @if ($event->person)
                         <p>
                             @if ($event->person instanceof \Illuminate\Support\Collection)
@@ -38,6 +43,6 @@
                     @endif
                 </div>
             @endif
-         </div>
+        </div>
     </div>
 </x-layouts.app>
