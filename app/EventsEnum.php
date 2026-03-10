@@ -14,4 +14,5 @@ enum EventsEnum: string
     case papers = EventTypesEnum::OTHER->value;
     case otherpapers = EventTypesEnum::OTHER->value;
     case deathchild = EventTypesEnum::OTHER->value;
+    case school = EventTypesEnum::GRADUATION->value;
 }
