@@ -2,6 +2,14 @@
     <section class="w-full">
         @include('partials.settings-heading')
 
+        @if ($errors->confirmTwoFactorAuthentication->any())
+            @foreach ($errors->confirmTwoFactorAuthentication->all() as $error)
+                <div class="bg-red-200 w-full px-2 py-2 my-[5px] text-white">
+                    Error - {{ $error }}
+                </div>
+            @endforeach
+        @endif
+
         <x-settings.layout :heading="__('Two Factor Authentication')" :subheading="__('Manage your two factor authentication')">
             @if (session('status') == 'two-factor-authentication-enabled')
                 <div class="mb-4 font-medium text-sm">
@@ -17,12 +25,13 @@
                                 name="code" />
                         </div>
                         <div class="flex items-end h-full justify-end">
-                            <flux:button variant="primary" type="submit" class="">{{ __('Activer') }}
+                            <flux:button variant="primary" type="submit" class="">{{ __('Vérifier') }}
                             </flux:button>
                         </div>
                     </div>
                 </form>
-            @elseif (session('status') == 'two-factor-authentication-confirmed')
+            @elseif (session('status') == 'two-factor-authentication-confirmed' ||
+                    request()->user()->hasEnabledTwoFactorAuthentication())
                 <div class="mb-4 font-medium text-sm">
                     Two-factor authentication confirmed and enabled successfully.
                 </div>
