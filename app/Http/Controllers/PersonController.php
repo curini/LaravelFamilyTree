@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\{Person, Group};
 use App\Services\PersonService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
 class PersonController extends Controller
@@ -108,7 +109,7 @@ class PersonController extends Controller
         return redirect()->route('persons.index');
     }
 
-    public function json()
+    public function json(): JsonResponse
     {
         return response()->json(Person::all()->toArray());
     }
