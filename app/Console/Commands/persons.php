@@ -28,7 +28,7 @@ class persons extends Command
      */
     public function handle()
     {
-        $this->info('Start of the export');
+        $this->info('Start of the export for persons');
         $persons = $this->getPersons();
         if (empty($persons)) {
             $this->fail('There is no persons in database!');
@@ -45,6 +45,7 @@ class persons extends Command
             'spousePerson:id,first_name,last_name',
             'childrenAsMother:id,first_name,last_name,mother_id',
             'childrenAsFather:id,first_name,last_name,father_id',
+            'brothers',
             'events' => function ($query) {
                 $query->select('id', 'person_id', 'date')
                     ->orderBy('date', 'asc');
@@ -63,6 +64,11 @@ class persons extends Command
                 'mother_id',
                 'father_id',
                 'spouse_id'
-            )->get()->toArray();
+            )->get()->each(function ($item) {
+                $item->setRelation(
+                    'brothers',
+                    $item->brothers->where('id', '!=', $item->id)->values()
+                );
+            })->toArray();
     }
 }
