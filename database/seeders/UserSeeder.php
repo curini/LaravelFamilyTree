@@ -40,10 +40,11 @@ class UserSeeder extends Seeder
             ->toArray();
 
         $myUser['password'] = Hash::make('password');
+        $myUser['role_id'] = Role::where('name', RolesEnum::ADMIN)->first()->id;
 
         User::updateOrCreate(
             [
-                'email' => 'stefan92@example.com',
+                'email' => 'stefan92@example.com'
             ],
             $myUser
         );

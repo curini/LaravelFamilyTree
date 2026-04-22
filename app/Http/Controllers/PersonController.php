@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdatePersonRequest;
 use Illuminate\Http\Request;
 use App\Models\{Person, Group};
 use App\Services\PersonService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
 class PersonController extends Controller
@@ -90,7 +92,7 @@ class PersonController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(UpdatePersonRequest $request, string $id): RedirectResponse
     {
         Person::findOrFail($id)->update($request->all());
 
@@ -107,7 +109,7 @@ class PersonController extends Controller
         return redirect()->route('persons.index');
     }
 
-    public function json()
+    public function json(): JsonResponse
     {
         return response()->json(Person::all()->toArray());
     }
