@@ -36,6 +36,22 @@ class Person extends Model
         });
     }
 
+    public function brothers(): HasMany
+    {
+        $select = ['id', 'last_name', 'first_name', 'mother_id', 'father_id'];
+        return $this->brothersFromFather()->select($select)->union($this->brothersFromMother()->select($select));
+    }
+
+    public function brothersFromMother(): HasMany
+    {
+        return $this->hasMany(Person::class, 'mother_id', 'mother_id');
+    }
+
+    public function brothersFromFather(): HasMany
+    {
+        return $this->hasMany(Person::class, 'father_id', 'father_id');
+    }
+
     public function spousePerson(): BelongsTo
     {
         return $this->belongsTo(Person::class, 'spouse_id');
