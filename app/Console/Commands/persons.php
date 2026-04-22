@@ -14,7 +14,7 @@ class persons extends Command
      *
      * @var string
      */
-    protected $signature = 'ft:persons:export {person?}';
+    protected $signature = 'ft:persons:export';
 
     /**
      * The console command description.
