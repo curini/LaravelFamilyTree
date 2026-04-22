@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\EventTypesEnum;
 use DateTime;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Person extends Model
 {
@@ -33,47 +36,47 @@ class Person extends Model
         });
     }
 
-    public function spousePerson()
+    public function spousePerson(): BelongsTo
     {
         return $this->belongsTo(Person::class, 'spouse_id');
     }
 
-    public function oldSpouses()
+    public function oldSpouses(): BelongsToMany
     {
         return $this->belongsToMany(Person::class, 'old_spouse_person', 'person_id', 'spouse_id');
     }
 
-    public function motherPerson()
+    public function motherPerson(): BelongsTo
     {
         return $this->belongsTo(Person::class, 'mother_id');
     }
 
-    public function fatherPerson()
+    public function fatherPerson(): BelongsTo
     {
         return $this->belongsTo(Person::class, 'father_id');
     }
 
-    public function childrenAsFather()
+    public function childrenAsFather(): HasMany
     {
         return $this->hasMany(Person::class, 'father_id');
     }
 
-    public function childrenAsMother()
+    public function childrenAsMother(): HasMany
     {
         return $this->hasMany(Person::class, 'mother_id');
     }
 
-    public function portrait()
+    public function portrait(): BelongsTo
     {
         return $this->belongsTo(Image::class, 'image_id');
     }
 
-    public function events()
+    public function events(): HasMany
     {
         return $this->hasMany(Event::class, 'person_id');
     }
 
-    public function gender()
+    public function gender(): BelongsTo
     {
         return $this->belongsTo(Gender::class);
     }
@@ -103,7 +106,7 @@ class Person extends Model
             ->first();
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->first_name . ' ' . $this->last_name;
     }
