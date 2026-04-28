@@ -7,14 +7,14 @@ use App\Models\Person;
 use Illuminate\Support\Facades\Storage;
 
 
-class persons extends Command
+class ExportPersons extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'ft:persons:export';
+    protected $signature = 'ft:export:persons';
 
     /**
      * The console command description.

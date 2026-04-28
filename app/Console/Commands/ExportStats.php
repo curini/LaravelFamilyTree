@@ -11,9 +11,9 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-#[Signature('ft:stats:export')]
+#[Signature('ft:export:stats')]
 #[Description('Permet de créer un fichier TypeScript contenant toutes les stats.')]
-class stats extends Command
+class ExportStats extends Command
 {
     /**
      * Execute the console command.
