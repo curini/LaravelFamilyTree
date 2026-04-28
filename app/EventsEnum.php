@@ -8,6 +8,7 @@ enum EventsEnum: string
     case death = EventTypesEnum::DEATH->value;
     case wedding = EventTypesEnum::WEDDING->value;
     case otherwedding = EventTypesEnum::WEDDING->value;
+    case divorce = EventTypesEnum::DIVORCE->value;
     case military = EventTypesEnum::MILITARY->value;
     case house = EventTypesEnum::MOVE->value;
     case oldhouse = EventTypesEnum::MOVE->value;
