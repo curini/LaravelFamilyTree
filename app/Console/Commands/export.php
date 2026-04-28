@@ -19,6 +19,7 @@ class export extends Command
         $this->call('ft:cities:export');
         $this->call('ft:images:export');
         $this->call('ft:stats:export');
+        $this->call('ft:events:export');
         $this->call('ft:tree:export');
     }
 }
