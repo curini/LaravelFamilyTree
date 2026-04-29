@@ -8,9 +8,9 @@ use Illuminate\Console\Command;
 use App\Models\Image;
 use Illuminate\Support\Facades\Storage;
 
-#[Signature('ft:images:export')]
+#[Signature('ft:export:images')]
 #[Description('Permet de créer un fichier TypeScript contenant toutes les images.')]
-class images extends Command
+class ExportImages extends Command
 {
     /**
      * Execute the console command.

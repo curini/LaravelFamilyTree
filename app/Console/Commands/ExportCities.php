@@ -8,9 +8,9 @@ use Illuminate\Console\Command;
 use App\Models\City;
 use Illuminate\Support\Facades\Storage;
 
-#[Signature('ft:cities:export')]
+#[Signature('ft:export:cities')]
 #[Description('Permet de créer un fichier TypeScript contenant toutes les villes.')]
-class cities extends Command
+class ExportCities extends Command
 {
     /**
      * Execute the console command.

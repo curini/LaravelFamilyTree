@@ -33,10 +33,7 @@ class UserSeeder extends Seeder
         //User::factory(10)->create();
 
         $myUser = User::factory()
-            ->make([
-                'email' => 'stefan92@example.com',
-                'name' => 'Stefan Von Bronquost',
-            ])
+            ->make(config('app.default_user'))
             ->toArray();
 
         $myUser['password'] = Hash::make('password');
@@ -44,7 +41,7 @@ class UserSeeder extends Seeder
 
         User::updateOrCreate(
             [
-                'email' => 'stefan92@example.com'
+                'email' => config('app.default_user.email')
             ],
             $myUser
         );

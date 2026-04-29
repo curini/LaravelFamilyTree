@@ -8,9 +8,9 @@ use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Support\Facades\Storage;
 
-#[Signature('ft:events:export')]
+#[Signature('ft:export:events')]
 #[Description('Permet de créer un fichier TypeScript contenant tous les évènements.')]
-class events extends Command
+class ExportEvents extends Command
 {
     /**
      * Execute the console command.
