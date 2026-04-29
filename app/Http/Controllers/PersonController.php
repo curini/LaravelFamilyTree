@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdatePersonRequest;
 use Illuminate\Http\Request;
-use App\Models\{Country, Person, Group};
+use App\Models\{Person, Group};
+use App\Services\PersonService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
 class PersonController extends Controller
@@ -44,12 +47,8 @@ class PersonController extends Controller
      */
     public function create(): View
     {
-        $mothers = Person::where('gender', 'F')->pluck('name', 'id');
-        $fathers = Person::where('gender', 'M')->pluck('name', 'id');
-        $spouses = Person::all()->pluck('name', 'id');
-        $groups = Group::all()->pluck('id', 'id');
-        $countries = Country::all();
-        return view('livewire.person.create', compact('mothers', 'fathers', 'spouses', 'groups', 'countries'));
+        $person = new PersonService();
+        return view('livewire.person.edit', $person->getPersontToEdit());
     }
 
     /**
@@ -86,19 +85,14 @@ class PersonController extends Controller
      */
     public function edit(string $id): View
     {
-        $person = Person::findOrFail($id);
-        $mothers = Person::where('gender', 'F')->pluck('name', 'id');
-        $fathers = Person::where('gender', 'M')->pluck('name', 'id');
-        $spouses = Person::all()->pluck('name', 'id');
-        $groups = Group::all()->pluck('id', 'id');
-        $countries = Country::all();
-        return view('livewire.person.edit', compact('person', 'mothers', 'fathers', 'spouses', 'groups', 'countries'));
+        $person = new PersonService();
+        return view('livewire.person.edit', $person->getPersontToEdit($id));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(UpdatePersonRequest $request, string $id): RedirectResponse
     {
         Person::findOrFail($id)->update($request->all());
 
@@ -115,11 +109,8 @@ class PersonController extends Controller
         return redirect()->route('persons.index');
     }
 
-    public function json()
+    public function json(): JsonResponse
     {
-        $person = Person::all()->toArray();
-        $group = Group::all()->toArray();
-
-        return response()->json(array_merge($person, $group));
+        return response()->json(Person::all()->toArray());
     }
 }

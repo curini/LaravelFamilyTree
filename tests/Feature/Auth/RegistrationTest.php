@@ -3,6 +3,8 @@
 namespace Tests\Feature\Auth;
 
 use App\Livewire\Auth\Register;
+use App\Models\Role;
+use App\RolesEnum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -14,12 +16,16 @@ class RegistrationTest extends TestCase
     public function test_registration_screen_can_be_rendered(): void
     {
         $response = $this->get('/register');
-
-        $response->assertStatus(200);
+        // the route is disabled
+        $response->assertStatus(404);
     }
 
     public function test_new_users_can_register(): void
     {
+        $role = Role::factory()->create([
+            'name' => RolesEnum::USER,
+        ]);
+
         $response = Livewire::test(Register::class)
             ->set('name', 'Test User')
             ->set('email', 'test@example.com')
@@ -27,9 +33,7 @@ class RegistrationTest extends TestCase
             ->set('password_confirmation', 'password')
             ->call('register');
 
-        $response
-            ->assertHasNoErrors()
-            ->assertRedirect(route('home', absolute: false));
+        $response->assertHasNoErrors()->assertRedirect(route('home', absolute: false));
 
         $this->assertAuthenticated();
     }

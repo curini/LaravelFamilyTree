@@ -20,6 +20,7 @@
 
             <flux:spacer />
 
+            @admin
             <flux:navlist variant="outline">
                 <flux:navlist.item icon="users" :href="route('persons.index')" :current="request()->routeIs('persons.index')" wire:navigate>
                 {{ __('Persons') }}
@@ -28,14 +29,11 @@
                 {{ __('Create person') }}
                 </flux:navlist.item>
                 <flux:menu.separator />
-                <flux:navlist.item icon="folder-git-2" :href="route('groups.index')" :current="request()->routeIs('groups.index')" wire:navigate>
-                {{ __('Groups') }}
-                </flux:navlist.item>
-                <flux:menu.separator />
                 <flux:navlist.item icon="layout-grid" :href="route('events.index')" :current="request()->routeIs('events.index')" wire:navigate>
                 {{ __('Events') }}
                 </flux:navlist.item>
             </flux:navlist>
+            @endadmin
 
             <!-- Desktop User Menu -->
             <flux:dropdown position="bottom" align="start">

@@ -3,7 +3,9 @@
 
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold">{{ $person->getName() }}</h1>
-            <a href="{{ route('persons.edit', $person->id) }}" class="text-blue-600 hover:underline text-sm" wire:navigate>{{ __('Edit') }}</a>
+            @admin
+                <a href="{{ route('persons.edit', $person->id) }}" class="text-blue-600 hover:underline text-sm" wire:navigate>{{ __('Edit') }}</a>
+            @endadmin
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -16,6 +18,8 @@
 
                 <div class="p-6 space-y-4">
                     <h3 class="text-xl font-semibold">{{ __('Personal Information') }}</h3>
+
+                    <p><strong>{{ __('First names:') }}</strong> {{ $person->first_names }}</p>
 
                     @isset($person->gender)
                         <p><strong>{{ __('Gender:') }}</strong> {{ $person->gender->name }}</p>
@@ -35,7 +39,7 @@
                 </div>
 
                 <div class="p-6 space-y-4">
-                    <h3 class="text-xl font-semibold">{{ __('Family & Group') }}</h3>
+                    <h3 class="text-xl font-semibold">{{ __('Family') }}</h3>
 
                     @isset($person->motherPerson)
                         <p><strong>{{ __('Mother:') }}</strong>
@@ -54,12 +58,6 @@
                             <flux:link href="{{ route('persons.show', $person->spousePerson->id) }}" wire:navigate>{{ $person->spousePerson->getName() }}</flux:link>
                         </p>
                     @endisset
-
-                    @if($person->group)
-                        <p><strong>{{ __('Group:') }}</strong>
-                            <flux:link href="{{ route('groups.show', $person->group) }}" wire:navigate>{{ $person->group->id }}</flux:link>
-                        </p>
-                    @endif
 
                     @php
                         $children = $person->childrenAsMother->merge($person->childrenAsFather);

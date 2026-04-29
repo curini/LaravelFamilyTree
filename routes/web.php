@@ -1,10 +1,8 @@
 <?php
 
-use App\Livewire\Settings\Appearance;
-use App\Livewire\Settings\Password;
-use App\Livewire\Settings\Profile;
+use App\Livewire\Settings\{Appearance, TwoFactor, Password, Profile};
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{EventController, PersonController, GroupController, PageController};
+use App\Http\Controllers\{EventController, PersonController, PageController};
 
 Route::get('/', [PageController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])
@@ -16,11 +14,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/profile', Profile::class)->name('settings.profile');
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
-    Route::get('persons/json', [PersonController::class, 'json'])->name('persons.json');
+    Route::get('settings/two-factor', function () {
+        return view('livewire.settings.two-factor');
+    })->name('settings.two-factor');
+
     Route::get('familyTree', [PageController::class, 'familyTree'])->name('familyTree');
-    Route::resource('persons', PersonController::class);
-    Route::resource('events', EventController::class);
-    Route::resource('groups', GroupController::class);
+
+    Route::middleware(['admin'])->group(function () {
+        Route::get('persons/json', [PersonController::class, 'json'])->name('persons.json');
+        Route::resource('persons', PersonController::class)->except(['show']);
+    });
+
+    Route::get('persons/{person}', [PersonController::class, 'show'])->name('persons.show');
+    Route::get('events/{event}', [EventController::class, 'show'])->name('events.show');
+    Route::get('events', [EventController::class, 'index'])->name('events.index');
 });
 
 require __DIR__ . '/auth.php';

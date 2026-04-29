@@ -1,9 +1,11 @@
 <?php
 
+use App\GendersEnum;
+
 return [
     'values' => [
-        ['name' => 'Male', 'value' => 'M'],
-        ['name' => 'Female', 'value' => 'F'],
-        ['name' => 'Other', 'value' => 'I'],
+        ['name' => 'Male', 'value' => GendersEnum::MALE],
+        ['name' => 'Female', 'value' => GendersEnum::FEMALE],
+        ['name' => 'Other', 'value' => GendersEnum::OTHER],
     ],
 ];

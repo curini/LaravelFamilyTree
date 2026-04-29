@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\EventTypesEnum;
+use App\EventsEnum;
 use App\Models\City;
 use App\Models\Event;
 use App\Models\EventType;
@@ -19,30 +19,21 @@ class EventSeeder extends Seeder
         $data = array_filter(json_decode(config('persons.data', []), true), function ($value) {
             return isset($value, $value['key'], $value['name']);
         });
-        $events = [
-            'birth' => EventTypesEnum::BIRTH->value,
-            'death' => EventTypesEnum::DEATH->value,
-            'wedding' => EventTypesEnum::WEDDING->value,
-            'otherwedding' => EventTypesEnum::WEDDING->value,
-            'military' => EventTypesEnum::MILITARY->value,
-            'house' => EventTypesEnum::MOVE->value,
-            'oldhouse' => EventTypesEnum::MOVE->value,
-            'papers' => EventTypesEnum::OTHER->value,
-            'otherpapers' => EventTypesEnum::OTHER->value,
-            'deathchild' => EventTypesEnum::OTHER->value,
-        ];
+
+        $events = EventsEnum::cases();
 
         foreach ($data as $key => $value) {
-            foreach ($events as $event => $type) {
-                if (isset($value[$event])) {
+            foreach ($events as $type) {
+                if (isset($value[$type->name])) {
                     $this->setAllEvent(
                         [
                             'id' => $value['key'],
-                            'date' => $value[$event],
-                            'image' => $value[$event . '_img'] ?? '',
-                            'city' => $value[$event . 'place'] ?? '',
+                            'date' => $value[$type->name],
+                            'image' => $value[$type->name . '_img'] ?? '',
+                            'city' => $value[$type->name . 'place'] ?? '',
+                            'description' => $value[$type->name . 'description'] ?? '',
                         ],
-                        $type
+                        $type->value
                     );
                 }
             }
@@ -66,6 +57,7 @@ class EventSeeder extends Seeder
                 'image_id' => $image->id ?? null,
                 'event_type_id' => $eventType->id,
                 'date' => new \DateTime($person['date']),
+                'description' => $person['description'] ?? null,
                 'city_id' => $city->id ?? null,
             ]
         );

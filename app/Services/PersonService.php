@@ -3,6 +3,10 @@
 namespace App\Services;
 
 use App\EventTypesEnum;
+use App\GendersEnum;
+use App\Models\City;
+use App\Models\EventType;
+use App\Models\Gender;
 use App\Models\Person;
 use Illuminate\Support\Facades\DB;
 
@@ -16,7 +20,23 @@ class PersonService
         //
     }
 
-    public function getPersonsStats()
+    public function getPersontToEdit($id = null): array
+    {
+        $person = isset($id) ? Person::with('events')->findOrFail($id) : new Person();
+        $femaleGender = Gender::where('value', GendersEnum::FEMALE)->first();
+        $maleGender = Gender::where('value', GendersEnum::MALE)->first();
+
+        $mothers = Person::where('gender_id', data_get($femaleGender, 'id'))->pluck('first_name', 'id');
+        $fathers = Person::where('gender_id', data_get($maleGender, 'id'))->pluck('first_name', 'id');
+        $spouses = Person::all()->pluck('first_name', 'id');
+        $cities = City::all();
+        $eventTypes = EventType::all();
+        $title = isset($id) ? 'Edit person' : 'New person';
+
+        return compact('person', 'mothers', 'fathers', 'spouses', 'cities', 'title', 'eventTypes');
+    }
+
+    public function getPersonsStats(): array
     {
         return [
             'nb_persons' => ['value' => $this->countPersons(), 'color' => 'text-red-800'],
@@ -35,29 +55,26 @@ class PersonService
         ];
     }
 
-    public function getPersons()
+    public function getPersons(): mixed
     {
         return Person::select('persons.*')
-            ->join('positions', 'positions.id', '=', 'persons.position_id')
-            ->whereNotNull('persons.position_id')
             ->whereNotNull('persons.gender_id')
             ->whereNotNull('persons.image_id')
-            ->with(['position', 'motherPerson', 'fatherPerson', 'spousePerson', 'portrait', 'oldSpouses', 'gender'])
-            ->orderBy('positions.y', 'asc')
+            ->with(['motherPerson', 'fatherPerson', 'spousePerson', 'portrait', 'oldSpouses', 'gender'])
             ->get();
     }
 
-    private function countPersons()
+    private function countPersons(): mixed
     {
         return Person::count();
     }
 
-    private function countDistinctLastNames()
+    private function countDistinctLastNames(): mixed
     {
         return Person::distinct('last_name')->where('last_name', '!=', '')->count('last_name');
     }
 
-    private function getMostFrequentLastName()
+    private function getMostFrequentLastName(): mixed
     {
         return Person::select('last_name', DB::raw('COUNT(*) as total'))
             ->where('last_name', '!=', '')
@@ -66,7 +83,7 @@ class PersonService
             ->first();
     }
 
-    private function getYounger(bool $is_deceased = false)
+    private function getYounger(bool $is_deceased = false): mixed
     {
         return Person::select('age')
             ->whereHas('events', function ($query) {
@@ -95,7 +112,7 @@ class PersonService
             ->first();
     }
 
-    private function getOlder(bool $is_deceased = false)
+    private function getOlder(bool $is_deceased = false): mixed
     {
         return Person::select('age')
             ->whereHas('events', function ($query) {

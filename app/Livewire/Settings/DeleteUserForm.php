@@ -5,7 +5,9 @@ namespace App\Livewire\Settings;
 use App\Livewire\Actions\Logout;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\Attributes\Layout;
 
+#[Layout('components.layouts.app')]
 class DeleteUserForm extends Component
 {
     public string $password = '';
