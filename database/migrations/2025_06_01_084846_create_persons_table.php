@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->string('job')->nullable();
             $table->string('description')->nullable();
             $table->unsignedInteger('age')->default(0);
+            $table->boolean('is_dead')->default(0);
             $table->foreignId('gender_id')->references('id')->on('genders');
             $table->foreignId('father_id')->nullable()->constrained('persons');
             $table->foreignId('mother_id')->nullable()->constrained('persons');

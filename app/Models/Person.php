@@ -24,6 +24,7 @@ class Person extends Model
         'mother_id',
         'father_id',
         'image_id',
+        'is_dead',
         'age',
     ];
 

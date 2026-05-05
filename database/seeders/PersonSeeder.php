@@ -50,6 +50,7 @@ class PersonSeeder extends Seeder
                     'mother_id' => $value['mother'] ?? null,
                     'spouse_id' => $value['spouse'] ?? null,
                     'image_id' => isset($image) ? $image->id : $default_image->id,
+                    'is_dead' => data_get($value, 'is_dead', 0)
                 ]
             );
 
