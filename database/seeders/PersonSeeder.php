@@ -2,13 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\EventsEnum;
 use App\Models\Gender;
-use App\Models\Image;
-use Illuminate\Database\Seeder;
 use App\Models\Person;
 
-class PersonSeeder extends Seeder
+class PersonSeeder extends ImageSeeder
 {
     /**
      * Run the database seeds.
@@ -26,8 +23,6 @@ class PersonSeeder extends Seeder
         foreach ($data as $key => $value) {
             $gender = Gender::where(['value' => $value['gender'] ?? 'M'])->firstOrFail();
             $image = isset($value['photo']) ? $this->updateOrCreateImage($value['photo'], 'portrait') : null;
-
-            $this->setImages($value);
 
             $name = $this->setNames($value['name']);
 
@@ -67,16 +62,6 @@ class PersonSeeder extends Seeder
         $person->oldSpouses()->sync($value);
     }
 
-    private function setImages(array $value): void
-    {
-        $types = EventsEnum::cases();
-        foreach ($types as $type) {
-            if (isset($value[$type->name . '_img'])) {
-                $this->updateOrCreateImage($value[$type->name . '_img'], $type->value);
-            }
-        }
-    }
-
     private function setNames(string $name): array
     {
         $names = explode(' ', $name);
@@ -94,16 +79,5 @@ class PersonSeeder extends Seeder
             'first_names' => trim($name),
             'last_name' => trim($lastname),
         ];
-    }
-
-    private function updateOrCreateImage(string $path, string $name): Image
-    {
-        return Image::updateOrCreate(
-            ['path' => asset($path)],
-            [
-                'path' => asset($path),
-                'name' => $name,
-            ]
-        );
     }
 }
