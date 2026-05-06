@@ -33,7 +33,9 @@ class Person extends Model
         parent::boot();
 
         self::saving(function ($model) {
-            $model->age = $model->calculateAge($model->birth(), $model->death());
+            if (($model->birth() && !$model->is_dead) || ($model->is_dead && $model->death())) {
+                $model->age = $model->calculateAge($model->birth(), $model->death());
+            }
         });
     }
 
