@@ -13,7 +13,14 @@
                     <div class="bg-white border border-gray-200 rounded-xl p-4 shadow hover:shadow-md transition">
                         <h2 class="text-sm font-semibold text-gray-600">{{ $key }}</h2>
                         <p class="text-xl font-bold {{ $stat['color'] }} mt-2">
-                            {{ $stat['value'] }}
+                            @if (!empty($stat['person_id']))
+                                <a href="{{ route('persons.show', $stat['person_id']) }}">
+                                    {{ $stat['value'] }}
+                                </a>
+                            @else
+                                {{ $stat['value'] }}
+                            @endif
+
                         </p>
                     </div>
                 @empty

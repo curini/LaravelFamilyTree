@@ -38,6 +38,11 @@ class PersonService
 
     public function getPersonsStats(): array
     {
+        $younger_deceased = $this->getYounger(true);
+        $older_deceased = $this->getOlder(true);
+        $younger = $this->getYounger();
+        $older = $this->getOlder();
+
         return [
             'nb_persons' => ['value' => $this->countPersons(), 'color' => 'text-red-800'],
             'nb_family_name' => ['value' => $this->countDistinctLastNames(), 'color' => 'text-gray-700'],
@@ -46,12 +51,25 @@ class PersonService
                 'color' => 'text-green-600',
             ],
             'more_younger_deceased' => [
-                'value' => data_get($this->getYounger(true), 'age'),
+                'value' => data_get($younger_deceased, 'age'),
                 'color' => 'text-purple-600',
+                'person_id' => data_get($younger_deceased, 'id')
             ],
-            'more_older_deceased' => ['value' => data_get($this->getOlder(true), 'age'), 'color' => 'text-blue-600'],
-            'more_younger' => ['value' => data_get($this->getYounger(), 'age'), 'color' => 'text-indigo-600'],
-            'more_older' => ['value' => data_get($this->getOlder(), 'age'), 'color' => 'text-orange-600'],
+            'more_older_deceased' => [
+                'value' => data_get($older_deceased, 'age'),
+                'color' => 'text-blue-600',
+                'person_id' => data_get($older_deceased, 'id')
+            ],
+            'more_younger' => [
+                'value' => data_get($younger, 'age'),
+                'color' => 'text-indigo-600',
+                'person_id' => data_get($younger, 'id')
+            ],
+            'more_older' => [
+                'value' => data_get($older, 'age'),
+                'color' => 'text-orange-600',
+                'person_id' => data_get($older, 'id')
+            ],
         ];
     }
 
@@ -85,7 +103,7 @@ class PersonService
 
     private function getYounger(bool $is_deceased = false): mixed
     {
-        return Person::select('age')
+        return Person::select('age', 'id')
             ->whereHas('events', function ($query) {
                 $query->whereHas('eventType', function ($q) {
                     $q->where('name', EventTypesEnum::BIRTH);
@@ -114,7 +132,7 @@ class PersonService
 
     private function getOlder(bool $is_deceased = false): mixed
     {
-        return Person::select('age')
+        return Person::select('age', 'id')
             ->whereHas('events', function ($query) {
                 $query->whereHas('eventType', function ($q) {
                     $q->where('name', EventTypesEnum::BIRTH);
